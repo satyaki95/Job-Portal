@@ -29,17 +29,7 @@ const sendEmail = async ({ to, subject, htmlContent }) => {
       }),
     });
 
-    // const brevo = new BrevoClient({ apiKey: BREVO_API_KEY });
-    // const response = await brevo.transactionalEmails.sendTransacEmail({
-    //   subject,
-    //   htmlContent,
-    //   sender: { name: "JobPortal", email: SENDER_EMAIL },
-    //   to,
-    // });
-
     const result = await response.json();
-
-    // console.log("->", response);
 
     if (!response.ok) {
       throw new Error(result.message || "Brevo API Error");
