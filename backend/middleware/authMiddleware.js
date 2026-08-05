@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const authMiddleware = (req, res, next) => {
+  
   try {
     const token = req.headers.authorization?.split(" ")[1];
 
