@@ -1,6 +1,6 @@
 import Job from "../models/job.model.js";
 import Application from "../models/application.model.js";
-import { uploadToCloudinary } from "../utils/cloudinary.js";
+import { uploadToCloudinary } from "../utils/cloudinaryUpload.js";
 
 // CREATE A JOB (ONLY BY ADMIN )
 export const createJob = async (req, res) => {
@@ -79,7 +79,7 @@ export const createJob = async (req, res) => {
       jobCriteria,
       education,
       postDate: postDateValue,
-      createdBy: req.user._id, // Assuming you have user authentication and req.user contains the authenticated user
+      createdBy: req.user.id, // Assuming you have user authentication and req.user contains the authenticated user
     });
 
     await job.save();
