@@ -11,7 +11,6 @@ export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     const userExist = await User.findOne({ email });
-    
 
     if (userExist) {
       return res
@@ -239,7 +238,7 @@ export const resetPassword = async (req, res) => {
 
     const user = await User.findOne({
       email,
-      resetPasswordOTP,
+      resetPasswordOTP: otp,
       resetPasswordOTPExpires: { $gt: Date.now() },
     });
 
