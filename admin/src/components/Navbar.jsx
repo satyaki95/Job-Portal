@@ -13,7 +13,12 @@ import {
   ChevronDown,
   Home,
   List,
+  LogIn,
+  LogOut,
+  Menu,
+  User,
   UserCheck,
+  X,
 } from "lucide-react";
 import logoFallback from "../assets/logo.png";
 
@@ -319,19 +324,214 @@ const Navbar = ({ logoSrc, brandName = "Job Portal", onNavigate }) => {
                                       ? undefined
                                       : "transparent",
                                 }}
-                              ></div>
+                              >
+                                <div className={s.dropdownInner}>
+                                  {item.dropdown.map((sub) => {
+                                    const isActiveSub = active === sub.key;
+
+                                    return (
+                                      <button
+                                        key={sub.key}
+                                        onClick={() => handleNavigate(sub.key)}
+                                        className={`${s.dropdownItem} ${
+                                          isActiveSub
+                                            ? s.dropdownItemActive
+                                            : s.dropdownItemInactive
+                                        }`}
+                                      >
+                                        <span
+                                          className={s.dropdownItemDot}
+                                        ></span>
+                                        <span>{sub.label}</span>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
                             </div>
                           )}
                         </li>
+
+                        {!isLGOnly &&
+                          item.dropdown &&
+                          item.dropdown.map((sub) => {
+                            const isActiveSub = active === sub.key;
+
+                            return (
+                              <li key={sub.key} className={s.subNavItem}>
+                                <div
+                                  ref={(el) => (itemRefs.current[sub.key] = el)}
+                                  className={s.navItemWrapper}
+                                >
+                                  <button
+                                    onClick={() => handleNavigate(sub.key)}
+                                    className={`${s.subNavButton} ${isActiveSub ? s.subNavButtonActive : s.subNavButtonInactive}`}
+                                  >
+                                    <span className={s.subNavDot}></span>
+                                    <span className={s.navButtonText}>
+                                      {sub.label}
+                                    </span>
+                                  </button>
+                                </div>
+                              </li>
+                            );
+                          })}
                       </React.Fragment>
                     );
                   })}
                 </ul>
               </div>
             </div>
+            {/* right side */}
+            <div className={s.rightActions}>
+              <div className={s.desktopAuth}>
+                {user ? (
+                  <div
+                    ref={userMenuContainerRef}
+                    className={s.userMenuContainer}
+                    onMouseEnter={openUserMenu}
+                    onMouseLeave={() => startCloseTimer(250)}
+                  >
+                    <button
+                      onClick={() => {
+                        if (closeTimeoutRef.current) {
+                          clearTimeout(closeTimeoutRef.current);
+                          closeTimeoutRef.current = null;
+                        }
+                        setUserMenuOpen((s) => !s);
+                      }}
+                      className={s.userMenuButton}
+                    >
+                      <User className={s.userIcon} />
+                      <span className={s.userName}>{user.name}</span>
+                      <ChevronDown className={s.userDropdownIcon} />
+                    </button>
+
+                    <div
+                      className={`${s.userDropdown} ${userMenuOpen ? s.userDropdownVisible : s.userDropdownHidden}`}
+                    >
+                      <div
+                        className={`${s.dropdownContent} ${userMenuOpen ? "animate-border" : "bg-transparent"}`}
+                        style={{
+                          background: userMenuOpen ? undefined : "transparent",
+                        }}
+                      >
+                        <div className={s.userDropdownInner}>
+                          <button
+                            onClick={handleLogout}
+                            className={s.logoutButton}
+                          >
+                            <LogOut className={s.logoutIcon} />
+                            <span>Logout</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleNavigate("login")}
+                    className={s.loginButton}
+                  >
+                    <span className={s.loginButtonOverlay}></span>
+                    <span className={s.loginButtonContent}>
+                      <LogIn className={s.loginIcon} />
+                      <span>Login</span>
+                    </span>
+                  </button>
+                )}
+              </div>
+
+              {/* toggle */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className={s.mobileMenuButton}
+              >
+                {mobileMenuOpen ? (
+                  <X className={s.mobileMenuIcon} />
+                ) : (
+                  <Menu className={s.mobileMenuIcon} />
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* for mobile navigation */}
+
+          {mobileMenuOpen && (
+            <div className={s.mobileMenu}>
+              <div className={s.mobileMenuContent}>
+                {NAV_ITEMS.map((item) => {
+                  const Icon = item.Icon;
+                  const isActiveParent = active === item.key;
+
+                  return (
+                    <div key={item.key} className={s.mobileNavItem}>
+                      <button
+                        onClick={() => handleNavigate(item.key)}
+                        className={`${s.mobileNavButton} ${isActiveParent ? s.mobileNavButtonActive : s.mobileNavButtonInactive}`}
+                      >
+                        <Icon className={s.mobileNavIcon} />
+                        <span className={s.mobileNavText}>{item.label}</span>
+                      </button>
+
+                      {item.dropdown && (
+                        <div className={s.mobileDropdown}>
+                          {item.dropdown.map((sub) => {
+                            const isActiveSub = active === sub.key;
+
+                            return (
+                              <button
+                                key={sub.key}
+                                onClick={() => handleNavigate(sub.key)}
+                                className={`${s.mobileDropdownItem} ${isActiveSub ? s.mobileDropdownItemActive : s.mobileDropdownItemInactive}`}
+                              >
+                                {sub.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {/* mobile user */}
+
+                {user ? (
+                  <>
+                    <div className={s.mobileUserInfo}>
+                      <span className={s.mobileUserInfoContent}>
+                        <User className={s.userIcon} />
+                        <span className={s.userName}>{user.name}</span>
+                      </span>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className={s.mobileLogoutButton}
+                    >
+                      <LogOut className={s.mobileNavIcon} />
+                      <span>Logout</span>
+                    </button>
+                  </>
+                ) : (
+                  <div className={s.mobileLoginContainer}>
+                    <button
+                      onClick={() => handleNavigate("login")}
+                      className={s.mobileLoginButton}
+                    >
+                      <LogIn className={s.mobileNavIcon} />
+                      <span>Login</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </nav>
+
+      <style>{s.animations}</style>
     </header>
   );
 };
