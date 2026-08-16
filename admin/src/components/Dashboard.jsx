@@ -38,10 +38,10 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem("token");
 
-        // if (!token) {
-        //   navigate("/login");
-        //   return;
-        // }
+        if (!token) {
+          navigate("/login");
+          return;
+        }
 
         // To fetch stats
         const statsRef = await fetch(
