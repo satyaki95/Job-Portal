@@ -26,6 +26,16 @@ import {
 } from "lucide-react";
 import { listJobsStyles as s, getBadgeClasses } from "../assets/dummyStyles";
 
+/**
+ * Badge Component
+ * Displays a styled badge with optional remove button
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Content to display in the badge
+ * @param {string} props.variant - Badge style variant (default, tech, location, etc.)
+ * @param {Function} props.onRemove - Callback when remove button is clicked
+ * @param {string} props.className - Additional CSS classes
+ * @returns {JSX.Element} Badge component
+ */
 const Badge = ({ children, variant = "default", onRemove, className = "" }) => {
   return (
     <span
@@ -46,6 +56,15 @@ const Badge = ({ children, variant = "default", onRemove, className = "" }) => {
   );
 };
 
+/**
+ * Field Component
+ * Reusable form field wrapper with label and icon
+ * @param {Object} props - Component props
+ * @param {string} props.label - Field label text
+ * @param {React.ReactNode} props.icon - Icon element to display with label
+ * @param {React.ReactNode} props.children - Form input elements
+ * @returns {JSX.Element} Form field component
+ */
 const Field = ({ label, icon, children }) => {
   return (
     <div className={s.fieldContainer}>
@@ -57,6 +76,14 @@ const Field = ({ label, icon, children }) => {
   );
 };
 
+/**
+ * Format Salary Display
+ * Converts salary object to human-readable format
+ * @param {Object} salary - Salary object containing amount and period
+ * @param {number} salary.amount - Salary amount
+ * @param {string} salary.period - Period type (hour, day, week, month, year)
+ * @returns {string} Formatted salary string or "Not disclosed" if no amount provided
+ */
 function formatSalary(salary) {
   if (!salary) return "Not disclosed";
   const { amount, period } = salary;
@@ -74,6 +101,12 @@ const ListJobs = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const navigate = useNavigate();
 
+  /**
+   * Map Backend Job Data to Frontend Format
+   * Transforms job data from backend API to frontend component structure
+   * @param {Object} bJob - Backend job object from API
+   * @returns {Object} Formatted job object for frontend components
+   */
   const mapBackToFrontend = (bJob) => {
     return {
       id: bJob._id,
@@ -104,6 +137,13 @@ const ListJobs = () => {
     };
   };
 
+  /**
+   * Fetch Jobs from Backend API
+   * Retrieves all jobs for the current admin user
+   * Maps backend response to frontend format and updates state
+   * @async
+   * @returns {Promise<void>}
+   */
   const fetchJobs = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -122,6 +162,7 @@ const ListJobs = () => {
     fetchJobs();
   }, []);
 
+  // update
   const [newTech, setNewTech] = useState("");
   const [newResponsibility, setNewResponsibility] = useState("");
   const [newCriterion, setNewCriterion] = useState("");
@@ -137,8 +178,16 @@ const ListJobs = () => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 3000);
     return () => clearTimeout(t);
-  }, [toast]);
+  }, [toast]); // toast timeout in 3 sec
 
+  /**
+   * Handle Job Deletion
+   * Confirms deletion and removes job from backend
+   * Updates local state after successful deletion
+   * @async
+   * @param {string} id - Job ID to delete
+   * @returns {Promise<void>}
+   */
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this job? This action cannot be undone."))
       return;
@@ -157,6 +206,13 @@ const ListJobs = () => {
     }
   };
 
+  /**
+   * Open Edit Modal
+   * Initializes editing state for selected job and displays edit modal
+   * Resets form input fields to default state
+   * @param {Object} job - Job object to edit
+   * @returns {void}
+   */
   const openEdit = (job) => {
     setEditingJob(JSON.parse(JSON.stringify(job)));
     setShowModal(true);
@@ -168,6 +224,11 @@ const ListJobs = () => {
     setEditingLocationText("");
   };
 
+  /**
+   * Close Edit Modal
+   * Hides the edit modal and clears all editing state
+   * @returns {void}
+   */
   const closeModal = () => {
     setShowModal(false);
     setEditingJob(null);
@@ -175,6 +236,14 @@ const ListJobs = () => {
     setEditingLocationText("");
   };
 
+  /**
+   * Handle Job Update Submission
+   * Validates and sends updated job data to backend API
+   * Handles file upload for company logo if changed
+   * @async
+   * @param {Event} e - Form submission event
+   * @returns {Promise<void>}
+   */
   const handleSave = async (e) => {
     e.preventDefault();
     if (!editingJob) return;
@@ -216,13 +285,13 @@ const ListJobs = () => {
       formDataToSend.append(
         "education",
         JSON.stringify(editingJob.education || []),
-      );
+      ); // append the field either update one or the last saved one
 
       if (editingJob.image && editingJob.image.startsWith("data:")) {
         const res = await fetch(editingJob.image);
         const blob = await res.blob();
         formDataToSend.append("companyLogo", blob, "logo.png");
-      }
+      } // for image
 
       const res = await axios.put(
         `http://localhost:5000/api/job/${editingJob.id}`,
@@ -251,6 +320,13 @@ const ListJobs = () => {
     }
   };
 
+  /**
+   * Handle Form Field Change
+   * Updates editing job state for a single field
+   * @param {string} field - Field name to update
+   * @param {any} value - New value for the field
+   * @returns {void}
+   */
   const handleFieldChange = (field, value) => {
     setEditingJob((prev) => {
       if (!prev) return prev;
@@ -258,6 +334,14 @@ const ListJobs = () => {
     });
   };
 
+  /**
+   * Add Item to Array Field
+   * Appends new item to array fields (techstack, responsibilities, criteria, education)
+   * Trims whitespace from input
+   * @param {string} field - Array field name
+   * @param {string} item - Item value to add
+   * @returns {void}
+   */
   const addArrayItem = (field, item) => {
     if (!item || !item.trim()) return;
     setEditingJob((prev) => {
@@ -269,6 +353,13 @@ const ListJobs = () => {
     });
   };
 
+  /**
+   * Remove Item from Array Field
+   * Removes item at specified index from array fields
+   * @param {string} field - Array field name
+   * @param {number} index - Index of item to remove
+   * @returns {void}
+   */
   const removeArrayItem = (field, index) => {
     setEditingJob((prev) => {
       if (!prev) return prev;
@@ -279,10 +370,22 @@ const ListJobs = () => {
     });
   };
 
+  /**
+   * Handle Browse Button Click
+   * Triggers file input dialog for image selection
+   * @returns {void}
+   */
   const handleBrowseClick = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
 
+  /**
+   * Handle File Selection
+   * Validates selected file and converts to data URL
+   * Updates image field with file content
+   * @param {Event} e - File input change event
+   * @returns {void}
+   */
   const handleFileChange = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -297,16 +400,33 @@ const ListJobs = () => {
     reader.readAsDataURL(file);
   };
 
+  /**
+   * Handle Image Removal or image upload
+   * Clears the image field and resets file input
+   * @returns {void}
+   */
   const handleRemoveImage = () => {
     handleFieldChange("image", "");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  /**
+   * Start Editing Location
+   * Enables inline editing mode for a specific location
+   * @param {number} idx - Index of location to edit
+   * @returns {void}
+   */
   const startEditLocation = (idx) => {
     setEditingLocationIndex(idx);
     setEditingLocationText(editingJob?.locations?.[idx] ?? "");
   };
 
+  /**
+   * Save Edited Location
+   * Commits location changes to state or removes if empty
+   * Exits inline editing mode
+   * @returns {void}
+   */
   const saveEditLocation = () => {
     if (editingLocationIndex === null) return;
     const trimmed = (editingLocationText || "").trim();
@@ -324,6 +444,11 @@ const ListJobs = () => {
     setEditingLocationText("");
   };
 
+  /**
+   * Cancel Location Edit
+   * Discards location changes and exits inline editing mode
+   * @returns {void}
+   */
   const cancelEditLocation = () => {
     setEditingLocationIndex(null);
     setEditingLocationText("");
