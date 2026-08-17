@@ -165,6 +165,7 @@ const Navbar = ({ logoSrc, brandName = "Job Portal", onNavigate }) => {
   // to logout
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     setUser(null);
     navigate("/");
     setMobileMenuOpen(false);
