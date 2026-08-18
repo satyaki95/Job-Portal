@@ -360,11 +360,11 @@ const Dashboard = () => {
                   className={s.filterSelect}
                 >
                   <option value="">All Companies</option>
-                  {uniqueCompanies.map((company) => {
+                  {uniqueCompanies.map((company) => (
                     <option key={company} value={company}>
                       {company}
-                    </option>;
-                  })}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -379,11 +379,11 @@ const Dashboard = () => {
                   className={s.filterSelect}
                 >
                   <option value="">All Roles</option>
-                  {uniqueRoles.map((role) => {
+                  {uniqueRoles.map((role) => (
                     <option key={role} value={role}>
                       {role}
-                    </option>;
-                  })}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

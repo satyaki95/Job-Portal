@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AddJobs from "./pages/AddJobs";
 import ListJob from "./pages/ListJob";
+import CompanyPage from "./pages/CompanyPage";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/addjobs" element={<AddJobs />} />
           <Route path="/list/jobs" element={<ListJob />} />
+          <Route path="/companies" element={<CompanyPage />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>
