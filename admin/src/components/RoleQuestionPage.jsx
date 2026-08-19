@@ -152,6 +152,8 @@ const Toast = ({ message, type, onClose }) => {
   );
 };
 
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 const RoleQuestionPage = () => {
   const [roleName, setRoleName] = useState("");
   const [totalQuestions, setTotalQuestions] = useState("");
@@ -214,7 +216,7 @@ const RoleQuestionPage = () => {
       formDataToSend.append("questionsData", JSON.stringify(questions));
 
       const response = await axios.post(
-        "http://localhost:5000/api/interview/role",
+        `${baseURL}/api/interview/role`,
         formDataToSend,
         {
           headers: {

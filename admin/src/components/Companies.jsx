@@ -11,6 +11,8 @@ import {
   XCircle,
 } from "lucide-react";
 
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 const Companies = () => {
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState("");
@@ -27,7 +29,7 @@ const Companies = () => {
     const fetchCompanies = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/company/", {
+        const res = await axios.get(`${baseURL}/api/company/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -107,7 +109,7 @@ const Companies = () => {
       formData.append("website", website.trim());
 
       const res = await axios.post(
-        "http://localhost:5000/api/company",
+        `${baseURL}/api/company`,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -150,7 +152,7 @@ const Companies = () => {
       const token = localStorage.getItem("token");
 
       await axios.delete(
-        `http://localhost:5000/api/company/${pendingDeleteId}`,
+        `${baseURL}/api/company/${pendingDeleteId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },

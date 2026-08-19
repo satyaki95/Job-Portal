@@ -128,6 +128,8 @@ const parseCSVText = (text) => {
   return rows.map((r) => r.map((cell) => (cell == null ? "" : cell.trim())));
 };
 
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 const CompanyQuestionPage = () => {
   const [companyName, setCompanyName] = useState("");
   const [logoFile, setLogoFile] = useState(null);
@@ -275,7 +277,7 @@ const CompanyQuestionPage = () => {
         const token = localStorage.getItem("token");
 
         const response = await axios.post(
-          "http://localhost:5000/api/interview",
+          `${baseURL}/api/interview`,
           formDataToSend,
           {
             headers: {

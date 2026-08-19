@@ -93,6 +93,8 @@ function formatSalary(salary) {
   return `$ ${amt} ${periodLabel}`;
 }
 
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 const ListJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [editingJob, setEditingJob] = useState(null);
@@ -114,7 +116,7 @@ const ListJobs = () => {
         bJob.companyLogo?.startsWith("http") ||
         bJob.companyLogo?.startsWith("data:")
           ? bJob.companyLogo
-          : `http://localhost:5000${bJob.companyLogo || ""}`,
+          : `${baseURL}${bJob.companyLogo || ""}`,
       role: bJob.roleName,
       company: bJob.companyName,
       techstack: bJob.techStack,
@@ -147,7 +149,7 @@ const ListJobs = () => {
   const fetchJobs = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/job/admin/jobs", {
+      const res = await axios.get(`${baseURL}/api/job/admin/jobs`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {
@@ -193,7 +195,7 @@ const ListJobs = () => {
       return;
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.delete(`http://localhost:5000/api/job/${id}`, {
+      const res = await axios.delete(`${baseURL}/api/job/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {
@@ -294,7 +296,7 @@ const ListJobs = () => {
       } // for image
 
       const res = await axios.put(
-        `http://localhost:5000/api/job/${editingJob.id}`,
+        `${baseURL}/api/job/${editingJob.id}`,
         formDataToSend,
         {
           headers: {

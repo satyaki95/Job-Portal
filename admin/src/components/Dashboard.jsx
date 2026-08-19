@@ -14,6 +14,8 @@ import {
   XCircle,
 } from "lucide-react";
 
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 const Dashboard = () => {
   const [companyFilter, setCompanyFilter] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
@@ -45,7 +47,7 @@ const Dashboard = () => {
 
         // To fetch stats
         const statsRef = await fetch(
-          "http://localhost:5000/api/job/admin/stats",
+          `${baseURL}/api/job/admin/stats`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -61,7 +63,7 @@ const Dashboard = () => {
 
         // To fetch the jobs
         const jobsRef = await fetch(
-          "http://localhost:5000/api/job/admin/jobs",
+          `${baseURL}/api/job/admin/jobs`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -80,7 +82,7 @@ const Dashboard = () => {
             category: j.category,
             logo: j.companyLogo?.startsWith("http")
               ? j.companyLogo
-              : `http://localhost:5000${j.companyLogo || ""}`,
+              : `${baseURL}${j.companyLogo || ""}`,
             applicants: j.applicantsCount || 0,
             status: j.status || "active",
           }));
@@ -123,7 +125,7 @@ const Dashboard = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/job/${jobId}/close`, {
+      const res = await fetch(`${baseURL}/api/job/${jobId}/close`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -141,7 +143,7 @@ const Dashboard = () => {
 
         // refresh the stats
         const statsRef = await fetch(
-          "http://localhost:5000/api/job/admin/stats",
+          `${baseURL}/api/job/admin/stats`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -155,7 +157,7 @@ const Dashboard = () => {
         }
 
         const jobsRef = await fetch(
-          "http://localhost:5000/api/job/admin/jobs",
+          `${baseURL}/api/job/admin/jobs`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -174,7 +176,7 @@ const Dashboard = () => {
             category: j.category,
             logo: j.companyLogo?.startsWith("http")
               ? j.companyLogo
-              : `http://localhost:5000${j.companyLogo || ""}`,
+              : `${baseURL}${j.companyLogo || ""}`,
             applicants: j.applicantsCount || 0,
             status: j.status || "active",
           }));
