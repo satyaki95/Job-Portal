@@ -14,7 +14,7 @@ import {
 // ADD A COMPANY INTERVIEW QUESTION
 export const addInterviewCompany = async (req, res) => {
   try {
-    const { companyName, questionsCount, questionsDate } = req.body;
+    const { companyName, questionsCount, questionsData } = req.body;
 
     if (!companyName || !questionsCount) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -35,13 +35,13 @@ export const addInterviewCompany = async (req, res) => {
       companyName,
       logo: uploads.logoFile || "",
       questionsCount,
-      csvUrl: uploads.csvFile || "",
+      csvFileUrl: uploads.csvFile || "",
       createdBy: req.user.id,
     });
 
-    if (questionsDate) {
+    if (questionsData) {
       const formatted = parseQuestions(
-        questionsDate,
+        questionsData,
         "company",
         company._id,
         req.user.id,
