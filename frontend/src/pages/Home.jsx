@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import Banner from "../components/Banner";
 import Candidate from "../components/Candidate";
+import Career from "../components/Career";
 
 const Home = () => {
   return (
@@ -8,6 +9,7 @@ const Home = () => {
       <Navbar />
       <Banner />
       <Candidate />
+      <Career />
     </div>
   );
 };
