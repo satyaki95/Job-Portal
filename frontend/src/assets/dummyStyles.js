@@ -765,6 +765,9 @@ export const findJobPageStyles = {
   clearButton:
     "flex items-center gap-2 px-6 py-3.5 rounded-2xl border-2 border-gray-300 hover:bg-gray-50 hover:border-gray-400 text-gray-700 font-medium transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95",
   clearIcon: "w-5 h-5",
+  mobileShowFiltersButton:
+    "lg:hidden mb-6 inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-blue-600 text-white font-medium shadow-md hover:bg-blue-700 transition-colors",
+  mobileShowFiltersIcon: "w-5 h-5",
 
   // Main content layout
   mainContent: "container mx-auto px-4 pt-6",
@@ -772,6 +775,7 @@ export const findJobPageStyles = {
 
   // Sidebar styles
   sidebar: "w-full lg:w-1/4 block lg:block",
+  sidebarHidden: "w-full lg:w-1/4 hidden lg:block",
   sidebarSticky: "sticky top-4 pb-8",
   filterCard: "bg-white rounded-3xl shadow-xl p-6 border border-gray-200",
   filterHeader:
