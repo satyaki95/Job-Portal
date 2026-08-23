@@ -3,6 +3,7 @@ import Banner from "../components/Banner";
 import Candidate from "../components/Candidate";
 import Career from "../components/Career";
 import InterviewQuestion from "../components/InterviewQuestion";
+import Footer from "../components/Footer";
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
       <Candidate />
       <Career />
       <InterviewQuestion />
+      <Footer />
     </div>
   );
 };
