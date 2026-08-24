@@ -1354,7 +1354,7 @@ export const loginPageStyles = {
     "absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer",
 
   // ==================== Forgot Password ====================
-  forgotPasswordContainer: "text-right",
+  forgotPasswordContainer: "flex items-center justify-between",
   forgotPasswordButton:
     "text-sm text-blue-600 hover:text-blue-800 transition font-medium",
 
