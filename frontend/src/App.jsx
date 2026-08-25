@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import ViewProfile from "./pages/ViewProfile";
 import Company from "./pages/Company";
+import Roles from "./pages/Roles";
 
 const App = () => {
   return (
@@ -18,6 +19,8 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/viewprofile" element={<ViewProfile />} />
         <Route path="/companies" element={<Company />} />
+        <Route path="/roles" element={<Roles />} />
+        <Route path="/roles/:roleSlug" element={<Roles />} />
         <Route path="/jobdetails/:id" element={<JobDetail />} />
       </Routes>
     </>
