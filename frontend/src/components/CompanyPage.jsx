@@ -311,8 +311,10 @@ const CompanyPage = () => {
                           <div className={s.dateWrapper}>
                             <span className={s.date}>
                               <Calendar className={s.dateIcon} />
-                              {questionDate
-                                ? new Date(questionDate).toLocaleDateString()
+                              {question.postDate
+                                ? new Date(
+                                    question.postDate,
+                                  ).toLocaleDateString()
                                 : ""}
                             </span>
                           </div>

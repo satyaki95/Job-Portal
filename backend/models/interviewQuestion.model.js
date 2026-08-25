@@ -19,7 +19,7 @@ const interviewQuestionSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    postdate: {
+    postDate: {
       type: Date,
       default: Date.now(),
     },
