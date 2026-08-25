@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp";
 import ViewProfile from "./pages/ViewProfile";
 import Company from "./pages/Company";
 import Roles from "./pages/Roles";
+import Saved from "./pages/Saved";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/companies" element={<Company />} />
         <Route path="/roles" element={<Roles />} />
         <Route path="/roles/:roleSlug" element={<Roles />} />
+        <Route path="/saved" element={<Saved />} />
         <Route path="/jobdetails/:id" element={<JobDetail />} />
       </Routes>
     </>
