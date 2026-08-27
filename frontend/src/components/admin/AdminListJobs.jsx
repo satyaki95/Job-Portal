@@ -99,6 +99,8 @@ function formatSalary(salary) {
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 const AdminListJobs = () => {
+  const isEmployer = JSON.parse(localStorage.getItem("jobportal_user") || "null")?.role === "employer";
+  const jobsEndpoint = isEmployer ? `${baseURL}/api/employer/jobs` : `${baseURL}/api/job/admin/jobs`;
   const [jobs, setJobs] = useState([]);
   const [editingJob, setEditingJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -151,8 +153,11 @@ const AdminListJobs = () => {
    */
   const fetchJobs = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(`${baseURL}/api/job/admin/jobs`, {
+      const storedUser = JSON.parse(
+        localStorage.getItem("jobportal_user") || "null",
+      );
+      const token = storedUser?.token || localStorage.getItem("token");
+      const res = await axios.get(jobsEndpoint, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {
@@ -197,8 +202,11 @@ const AdminListJobs = () => {
     if (!window.confirm("Delete this job? This action cannot be undone."))
       return;
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.delete(`${baseURL}/api/job/${id}`, {
+      const storedUser = JSON.parse(
+        localStorage.getItem("jobportal_user") || "null",
+      );
+      const token = storedUser?.token || localStorage.getItem("token");
+      const res = await axios.delete(`${isEmployer ? `${baseURL}/api/employer/jobs` : `${baseURL}/api/job`}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {
@@ -299,7 +307,7 @@ const AdminListJobs = () => {
       } // for image
 
       const res = await axios.put(
-        `${baseURL}/api/job/${editingJob.id}`,
+        `${isEmployer ? `${baseURL}/api/employer/jobs` : `${baseURL}/api/job`}/${editingJob.id}`,
         formDataToSend,
         {
           headers: {
@@ -476,7 +484,7 @@ const AdminListJobs = () => {
                 type="text"
                 value={companyFilter}
                 onChange={(e) => setCompanyFilter(e.target.value)}
-                placeholder="Filter by company"
+                          placeholder="Filter by workshop or factory"
                 className={s.filterInput}
               />
               {companyFilter && (
@@ -621,7 +629,7 @@ const AdminListJobs = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate("/admin/applicants", {
+                      navigate(isEmployer ? "/employer/applicants" : "/admin/applicants", {
                         state: {
                           jobId: job.id,
                           role: job.role,
@@ -824,16 +832,20 @@ const AdminListJobs = () => {
                         className={s.select}
                       >
                         <option value="" disabled>
-                          Select category
+                          Select ITI trade
                         </option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="IT">IT</option>
-                        <option value="Data Science">Data Science</option>
-                        <option value="Design">Design</option>
-                        <option value="Product">Product</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Finance">Finance</option>
+                        <option value="Electrician">Electrician</option>
+                        <option value="Fitter">Fitter</option>
+                        <option value="Welder">Welder</option>
+                        <option value="Machinist">Machinist</option>
+                        <option value="Turner">Turner</option>
+                        <option value="Mechanic Motor Vehicle">Mechanic Motor Vehicle</option>
+                        <option value="Electronics Mechanic">Electronics Mechanic</option>
+                        <option value="COPA">COPA</option>
+                        <option value="Plumber">Plumber</option>
+                        <option value="Refrigeration and AC">Refrigeration and AC</option>
+                        <option value="Draughtsman Mechanical">Draughtsman Mechanical</option>
+                        <option value="Instrument Mechanic">Instrument Mechanic</option>
                       </select>
                     </Field>
                   </div>
@@ -999,8 +1011,8 @@ const AdminListJobs = () => {
                             }
                           }}
                           className={s.addItemInput}
-                          placeholder="Add a technology and press Enter"
-                          aria-label="Add technology"
+                          placeholder="Add a practical skill and press Enter"
+                          aria-label="Add practical skill"
                         />
                         <button
                           type="button"
@@ -1040,7 +1052,7 @@ const AdminListJobs = () => {
                               amount: amountValue,
                             });
                           }}
-                          placeholder="Amount"
+                          placeholder="Monthly stipend or salary"
                           className={s.salaryAmountInput}
                           aria-label="Salary amount"
                         />
@@ -1081,7 +1093,7 @@ const AdminListJobs = () => {
                   }
                   rows={3}
                   className={s.textarea}
-                  placeholder="Brief description of the role..."
+                  placeholder="Describe the workshop, plant, shift, and daily work..."
                 />
               </div>
 
@@ -1125,7 +1137,7 @@ const AdminListJobs = () => {
                         }
                       }}
                       className={s.addItemInput}
-                      placeholder="Add a responsibility"
+                      placeholder="Add a hands-on duty"
                     />
                     <button
                       type="button"
@@ -1184,7 +1196,7 @@ const AdminListJobs = () => {
                         }
                       }}
                       className={s.addItemInput}
-                      placeholder="Add a criterion"
+                      placeholder="Add a trade or practical requirement"
                       aria-label="Add criterion"
                     />
                     <button
@@ -1245,7 +1257,7 @@ const AdminListJobs = () => {
                           }
                         }}
                         className={s.addItemInput}
-                        placeholder="Add education"
+                        placeholder="Add ITI / NCVT / SCVT qualification"
                         aria-label="Add education"
                       />
                       <button

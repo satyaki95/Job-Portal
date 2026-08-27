@@ -279,19 +279,24 @@ const initialFormState = {
 };
 
 const categories = [
-  "Engineering",
-  "IT",
-  "Data Science",
-  "Design",
-  "Product",
-  "Marketing",
-  "Sales",
-  "Finance",
+  "Electrician",
+  "Fitter",
+  "Welder",
+  "Machinist",
+  "Turner",
+  "Mechanic Motor Vehicle",
+  "Electronics Mechanic",
+  "COPA",
+  "Plumber",
+  "Refrigeration and AC",
+  "Draughtsman Mechanical",
+  "Instrument Mechanic",
 ];
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 const AdminAddJobsPage = () => {
+  const isEmployer = JSON.parse(localStorage.getItem("jobportal_user") || "null")?.role === "employer";
   const [formData, setFormData] = useState({ ...initialFormState });
   const [toast, setToast] = useState({
     show: false,
@@ -400,10 +405,13 @@ const AdminAddJobsPage = () => {
           formDataToSend.append("companyLogo", formData.image);
         } // Append all the fields filled by the user
 
-        const token = localStorage.getItem("token");
+        const storedUser = JSON.parse(
+          localStorage.getItem("jobportal_user") || "null",
+        );
+        const token = storedUser?.token || localStorage.getItem("token");
 
         const response = await axios.post(
-          `${baseURL}/api/job`,
+          `${baseURL}${isEmployer ? "/api/employer/jobs" : "/api/job"}`,
           formDataToSend,
           {
             headers: {
@@ -483,7 +491,7 @@ const AdminAddJobsPage = () => {
                   setFormData({ ...formData, roleName: e.target.value })
                 }
                 error={errors.roleName}
-                placeholder="e.g. Senior Frontend Developer"
+                placeholder="e.g. ITI Electrician"
                 required
               />
 
@@ -496,7 +504,7 @@ const AdminAddJobsPage = () => {
                   setFormData({ ...formData, companyName: e.target.value })
                 }
                 error={errors.companyName}
-                placeholder="e.g. Acme Inc"
+                placeholder="e.g. ABC Manufacturing Works"
                 required
               />
             </div>
@@ -517,7 +525,7 @@ const AdminAddJobsPage = () => {
                     handleArrayChange("techStack", index, e.target.value)
                   }
                   className={`${s.arrayInput} ${errors.techStack && !tech.trim() ? s.arrayInputError : s.arrayInputDefault}`}
-                  placeholder="React, Node.js, etc."
+                  placeholder="e.g. panel wiring, motor control, testing"
                 />
                 {formData.techStack.length > 1 && (
                   <button
@@ -553,7 +561,7 @@ const AdminAddJobsPage = () => {
                 setFormData({ ...formData, location: e.target.value })
               }
               error={errors.location}
-              placeholder="e.g. New Delhi"
+              placeholder="e.g. Industrial Area, Pune"
               required
             />
             <AnimatedField
@@ -565,7 +573,7 @@ const AdminAddJobsPage = () => {
                 setFormData({ ...formData, experience: e.target.value })
               }
               error={errors.experience}
-              placeholder="2+ years"
+              placeholder="e.g. 0-2 years / fresher"
               required
             />
 
@@ -668,7 +676,7 @@ const AdminAddJobsPage = () => {
               required
             >
               <option value="" disabled>
-                Select category
+                Select ITI trade
               </option>
               {categories.map((cat) => (
                 <option value={cat} key={cat}>
@@ -702,7 +710,7 @@ const AdminAddJobsPage = () => {
                 setFormData({ ...formData, overview: e.target.value })
               }
               error={errors.overview}
-              placeholder="Brief description of the role..."
+              placeholder="Describe the workshop, plant, shift, and daily work..."
               required
             />
           </div>
@@ -726,7 +734,7 @@ const AdminAddJobsPage = () => {
                       ? s.arrayInputError
                       : s.arrayInputDefault
                   }`}
-                  placeholder="Develop new features..."
+                  placeholder="e.g. Read wiring diagrams and perform panel wiring"
                 />
                 {formData.responsibilities.length > 1 && (
                   <button
@@ -770,7 +778,7 @@ const AdminAddJobsPage = () => {
                       ? s.arrayInputError
                       : s.arrayInputDefault
                   }`}
-                  placeholder="5+ years experience..."
+                  placeholder="e.g. ITI certificate in Electrician trade"
                 />
                 {formData.jobCriteria.length > 1 && (
                   <button
@@ -814,7 +822,7 @@ const AdminAddJobsPage = () => {
                       ? s.arrayInputError
                       : s.arrayInputDefault
                   }`}
-                  placeholder="Bachelor's in Computer Science"
+                  placeholder="e.g. ITI / NCVT / SCVT certificate"
                 />
                 {formData.education.length > 1 && (
                   <button

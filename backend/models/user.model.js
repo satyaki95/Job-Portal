@@ -19,10 +19,23 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    tradeSkills: {
+      type: [String],
+      default: [],
+    },
+    certificationDetails: {
+      type: String,
+      default: "",
+    },
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "employer", "admin"],
       default: "user",
+    },
+    employerStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "approved",
     },
     resume: {
       type: String,
@@ -36,18 +49,6 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Job",
-      },
-    ],
-    saveInterviewQuestions: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "InterviewQuestion",
-      },
-    ],
-    savedRoleQuestions: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "RoleQuestion",
       },
     ],
     isVerified: {

@@ -27,7 +27,7 @@ const AdminDashboard = () => {
   const [dashboardStats, setDashboardStats] = useState({
     totalJobs: "0",
     closedJobs: "0",
-    totalApplicants: "0",
+    totalApplications: "0",
     totalCompanies: "0",
   });
   const [toast, setToast] = useState(null);
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
             logo: j.companyLogo?.startsWith("http")
               ? j.companyLogo
               : `${baseURL}${j.companyLogo || ""}`,
-            applicants: j.applicantsCount || 0,
+            applicants: j.applicationCount || 0,
             status: j.status || "active",
           }));
           setJobs(mappedJobs);
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
             logo: j.companyLogo?.startsWith("http")
               ? j.companyLogo
               : `${baseURL}${j.companyLogo || ""}`,
-            applicants: j.applicantsCount || 0,
+            applicants: j.applicationCount || 0,
             status: j.status || "active",
           }));
           setJobs(mappedJobs);
@@ -198,7 +198,7 @@ const AdminDashboard = () => {
     },
     {
       label: "Total Applicants",
-      value: dashboardStats.totalApplicants,
+      value: dashboardStats.totalApplications,
       icon: Users,
       colors: statColors.emerald,
     },
@@ -344,7 +344,7 @@ const AdminDashboard = () => {
 
           <div className={s.filtersGrid}>
             <div className={s.filterInputContainer}>
-              <label className={s.filterLabel}>Filter by Company</label>
+              <label className={s.filterLabel}>Filter by Workshop or Factory</label>
               <div className={s.filterInputWrapper}>
                 <Search className={s.filterSearchIcon} />
                 <select

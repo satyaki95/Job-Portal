@@ -17,7 +17,7 @@ const jobRouter = express.Router();
 jobRouter.post(
   "/",
   authMiddleware,
-  authorize("admin"),
+  authorize("admin", "employer"),
   upload.single("companyLogo"),
   createJob,
 );
@@ -25,14 +25,14 @@ jobRouter.post(
 jobRouter.get(
   "/admin/stats",
   authMiddleware,
-  authorize("admin"),
+  authorize("admin", "employer"),
   getDashboardStats,
 );
 
 jobRouter.get(
   "/admin/jobs",
   authMiddleware,
-  authorize("admin"),
+  authorize("admin", "employer"),
   getJobsByAdmin,
 );
 
@@ -42,12 +42,12 @@ jobRouter.get("/:id", getJobById);
 jobRouter.put(
   "/:id",
   authMiddleware,
-  authorize("admin"),
+  authorize("admin", "employer"),
   upload.single("companyLogo"),
   updateJob,
 );
 
-jobRouter.delete("/:id", authMiddleware, authorize("admin"), deleteJob);
-jobRouter.patch("/:id/close", authMiddleware, authorize("admin"), closeJob);
+jobRouter.delete("/:id", authMiddleware, authorize("admin", "employer"), deleteJob);
+jobRouter.patch("/:id/close", authMiddleware, authorize("admin", "employer"), closeJob);
 
 export default jobRouter;

@@ -1,8 +1,6 @@
 import Navbar from "../components/Navbar";
 import Banner from "../components/Banner";
 import Candidate from "../components/Candidate";
-import Career from "../components/Career";
-import InterviewQuestion from "../components/InterviewQuestion";
 import Footer from "../components/Footer";
 
 const Home = () => {
@@ -11,8 +9,6 @@ const Home = () => {
       <Navbar />
       <Banner />
       <Candidate />
-      <Career />
-      <InterviewQuestion />
       <Footer />
     </div>
   );

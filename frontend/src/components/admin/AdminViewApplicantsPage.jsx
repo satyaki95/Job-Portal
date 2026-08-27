@@ -4,8 +4,10 @@ import {
   ArrowLeft,
   Briefcase,
   Calendar,
+  Check,
   Mail,
   Phone,
+  X,
   Users,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -18,6 +20,11 @@ const AdminViewApplicantsPage = () => {
   const { jobId, role, companyName } = location.state || {};
   const [loading, setLoading] = useState(true);
   const [filtered, setFiltered] = useState([]);
+  const [updatingId, setUpdatingId] = useState(null);
+
+  const getToken = () =>
+    localStorage.getItem("token") ||
+    JSON.parse(localStorage.getItem("jobportal_user") || "null")?.token;
 
   // to fetch the applicants apply on that jobId
   useEffect(() => {
@@ -29,7 +36,7 @@ const AdminViewApplicantsPage = () => {
       setLoading(true);
 
       try {
-        const token = localStorage.getItem("token");
+        const token = getToken();
         const res = await fetch(
           `${baseURL}/api/application/${jobId}/applicants`,
           {
@@ -48,6 +55,7 @@ const AdminViewApplicantsPage = () => {
             appliedAt: app.appliedDate,
             resumeFile: app.resume,
             userId: app._id,
+            status: app.status || "pending",
           }));
           setFiltered(mapped);
         }
@@ -59,6 +67,33 @@ const AdminViewApplicantsPage = () => {
     };
     fetchApplicants();
   }, [jobId, role]);
+
+  const updateStatus = async (applicationId, status) => {
+    setUpdatingId(applicationId);
+    try {
+      const response = await fetch(
+        `${baseURL}/api/application/${applicationId}/status`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: JSON.stringify({ status }),
+        },
+      );
+
+      if (response.ok) {
+        setFiltered((current) =>
+          current.map((app) =>
+            app.id === applicationId ? { ...app, status } : app,
+          ),
+        );
+      }
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -155,6 +190,33 @@ const AdminViewApplicantsPage = () => {
                         <span className={s.dateBadge}>
                           {formatDate(app.appliedAt)}
                         </span>
+                      </div>
+                    </div>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold capitalize text-slate-600">
+                        {app.status}
+                      </span>
+                      <div className="flex gap-2">
+                        {app.status !== "accepted" && (
+                          <button
+                            title="Accept application"
+                            disabled={updatingId === app.id}
+                            onClick={() => updateStatus(app.id, "accepted")}
+                            className="rounded-md bg-emerald-600 p-2 text-white disabled:opacity-50"
+                          >
+                            <Check size={15} />
+                          </button>
+                        )}
+                        {app.status !== "rejected" && (
+                          <button
+                            title="Reject application"
+                            disabled={updatingId === app.id}
+                            onClick={() => updateStatus(app.id, "rejected")}
+                            className="rounded-md border border-rose-200 p-2 text-rose-600 disabled:opacity-50"
+                          >
+                            <X size={15} />
+                          </button>
+                        )}
                       </div>
                     </div>
                     <div className={s.buttonWrapper}>

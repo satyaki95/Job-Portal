@@ -1,4 +1,3 @@
-import React, { Children } from "react";
 import { footerStyles as s } from "../assets/dummyStyles";
 import logo from "../assets/logo.png";
 import Companylogo from "../assets/hexagonlogo.png";

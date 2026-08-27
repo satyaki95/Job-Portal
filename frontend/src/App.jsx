@@ -8,21 +8,21 @@ import JobDetail from "./pages/JobDetail";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import ViewProfile from "./pages/ViewProfile";
-import Company from "./pages/Company";
-import Roles from "./pages/Roles";
 import Saved from "./pages/Saved";
 import Contact from "./pages/Contact";
+import Applications from "./pages/Applications";
 
 import AdminHome from "./pages/admin/AdminHome";
 import AdminLogin from "./pages/admin/AdminLogin";
-import AdminAddJobs from "./pages/admin/AdminAddJobs";
 import AdminListJob from "./pages/admin/AdminListJob";
-import AdminCompanyPage from "./pages/admin/AdminCompanyPage";
-import AdminCompanyQuestion from "./pages/admin/AdminCompanyQuestion";
-import AdminListCompanyQs from "./pages/admin/AdminListCompanyQs";
-import AdminRoleQuestion from "./pages/admin/AdminRoleQuestion";
-import AdminListRoleQs from "./pages/admin/AdminListRoleQs";
 import AdminApplicantsPage from "./pages/admin/AdminApplicantsPage";
+import AdminNavbar from "./components/admin/AdminNavbar";
+import AdminManagementPage from "./components/admin/AdminManagementPage";
+
+import EmployerHome from "./pages/employer/EmployerHome";
+import EmployerAddJobs from "./pages/employer/EmployerAddJobs";
+import EmployerListJob from "./pages/employer/EmployerListJob";
+import EmployerApplicantsPage from "./pages/employer/EmployerApplicantsPage";
 
 const ScrollToTopOnRouteChange = () => {
   const { pathname } = useLocation();
@@ -90,46 +90,28 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/viewprofile" element={<ViewProfile />} />
 
-        <Route path="/companies" element={<Company />} />
-        <Route path="/companies/:companyId" element={<Company />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/applications" element={<Applications />} />
 
-        <Route path="/roles" element={<Roles />} />
-        <Route path="/roles/:roleSlug" element={<Roles />} />
         <Route path="/saved" element={<Saved />} />
         <Route path="/jobdetails/:id" element={<JobDetail />} />
         <Route path="*" element={null} />
-      </Routes>
 
-      <div className=" min-h-screen w-full overflow-x-hidden antialiased">
-        <div className=" min-w-0">
-          <Routes>
-            <Route path="/admin" element={<AdminHome />} />
-            <Route path="/admin/addjobs" element={<AdminAddJobs />} />
-            <Route path="/admin/list/jobs" element={<AdminListJob />} />
-            <Route path="/admin/companies" element={<AdminCompanyPage />} />
-            <Route
-              path="/admin/company-questions"
-              element={<AdminCompanyQuestion />}
-            />
-            <Route
-              path="/admin/list/company-questions"
-              element={<AdminListCompanyQs />}
-            />
-            <Route
-              path="/admin/role-questions"
-              element={<AdminRoleQuestion />}
-            />
-            <Route
-              path="/admin/list/role-questions"
-              element={<AdminListRoleQs />}
-            />
-            <Route path="/admin/applicants" element={<AdminApplicantsPage />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="*" element={null} />
-          </Routes>
-        </div>
-      </div>
+        <Route path="/admin" element={<AdminHome />} />
+        <Route path="/admin/list/jobs" element={<AdminListJob />} />
+        <Route path="/admin/applicants" element={<AdminApplicantsPage />} />
+        <Route path="/admin/manage" element={<><AdminNavbar /><AdminManagementPage /></>} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        <Route path="/employer" element={<EmployerHome />} />
+        <Route path="/employer/addjobs" element={<EmployerAddJobs />} />
+        <Route path="/employer/list/jobs" element={<EmployerListJob />} />
+        <Route
+          path="/employer/applicants"
+          element={<EmployerApplicantsPage />}
+        />
+        <Route path="*" element={null} />
+      </Routes>
 
       <ScrollToTopButton />
     </>

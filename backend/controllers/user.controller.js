@@ -29,12 +29,20 @@ export const getProfile = async (req, res) => {
 // UPDATE USER PROFILE
 export const updateProfile = async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
+    const { name, email, phone, tradeSkills, certificationDetails } = req.body;
     const updateData = {};
 
     if (name) updateData.name = name;
     if (email) updateData.email = email;
     if (phone) updateData.phone = phone;
+    if (tradeSkills !== undefined) {
+      updateData.tradeSkills = Array.isArray(tradeSkills)
+        ? tradeSkills.filter((skill) => skill.trim())
+        : JSON.parse(tradeSkills).filter((skill) => skill.trim());
+    }
+    if (certificationDetails !== undefined) {
+      updateData.certificationDetails = certificationDetails;
+    }
 
     // To Upload resume for job seekers
     if (req.file && req.user.role === "user") {

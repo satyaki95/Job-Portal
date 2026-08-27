@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Search,
@@ -39,7 +39,7 @@ const FindJobPage = () => {
     category: [],
   });
 
-  const [sortBy, setSortBy] = useState("newest");
+  const [sortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const [jobsPerPage] = useState(6);
   const [loading, setLoading] = useState(false);
@@ -103,14 +103,18 @@ const FindJobPage = () => {
   };
 
   const categories = [
-    "Engineering",
-    "IT",
-    "Data Science",
-    "Design",
-    "Product",
-    "Marketing",
-    "Sales",
-    "Finance",
+    "Electrician",
+    "Fitter",
+    "Welder",
+    "Machinist",
+    "Turner",
+    "Mechanic Motor Vehicle",
+    "Electronics Mechanic",
+    "COPA",
+    "Plumber",
+    "Refrigeration and AC",
+    "Draughtsman Mechanical",
+    "Instrument Mechanic",
   ];
 
   const handleSearchChange = (field, value) => {
@@ -179,19 +183,6 @@ const FindJobPage = () => {
         type: "error",
       });
     }
-  };
-
-  const toggleApplyJob = (jobId) => {
-    setAppliedJobs((prev) => {
-      const idStr = String(jobId);
-      const next = prev.includes(idStr)
-        ? prev.filter((id) => id !== idStr)
-        : [...prev, idStr];
-      try {
-        localStorage.setItem(STORAGE_APPLIED_KEY, JSON.stringify(next));
-      } catch {}
-      return next;
-    });
   };
 
   const applyJobOnce = (jobId) => {
@@ -529,14 +520,18 @@ const FindJobPage = () => {
 
   const getCategoryColor = (category) => {
     const colors = {
-      Engineering: "bg-blue-100 text-blue-700 border-blue-200",
-      IT: "bg-gray-100 text-gray-700 border-gray-200",
-      "Data Science": "bg-purple-100 text-purple-700 border-purple-200",
-      Design: "bg-pink-100 text-pink-700 border-pink-200",
-      Product: "bg-yellow-100 text-yellow-700 border-yellow-200",
-      Marketing: "bg-green-100 text-green-700 border-green-200",
-      Sales: "bg-red-100 text-red-700 border-red-200",
-      Finance: "bg-indigo-100 text-indigo-700 border-indigo-200",
+      Electrician: "bg-emerald-100 text-emerald-700 border-emerald-200",
+      Fitter: "bg-teal-100 text-teal-700 border-teal-200",
+      Welder: "bg-amber-100 text-amber-700 border-amber-200",
+      Machinist: "bg-sky-100 text-sky-700 border-sky-200",
+      Turner: "bg-cyan-100 text-cyan-700 border-cyan-200",
+      "Mechanic Motor Vehicle": "bg-orange-100 text-orange-700 border-orange-200",
+      "Electronics Mechanic": "bg-lime-100 text-lime-700 border-lime-200",
+      COPA: "bg-green-100 text-green-700 border-green-200",
+      Plumber: "bg-blue-100 text-blue-700 border-blue-200",
+      "Refrigeration and AC": "bg-indigo-100 text-indigo-700 border-indigo-200",
+      "Draughtsman Mechanical": "bg-slate-100 text-slate-700 border-slate-200",
+      "Instrument Mechanic": "bg-violet-100 text-violet-700 border-violet-200",
     };
     return colors[category] || "bg-gray-100 text-gray-700 border-gray-200";
   };
@@ -550,9 +545,6 @@ const FindJobPage = () => {
     };
     return colors[level] || "bg-gray-100 text-gray-700 border-gray-200";
   };
-
-  const getLocationColor = (location) =>
-    "bg-blue-100 text-blue-700 border-blue-200";
 
   const getJobTypeColor = (type) => {
     if (!type) return "bg-gray-100 text-gray-700 border-gray-200";
@@ -658,13 +650,13 @@ const FindJobPage = () => {
             <div className={s.searchCard}>
               <div className={s.searchGrid}>
                 <div className={s.inputGroup}>
-                  <label className={s.inputLabel}>Company</label>
+                  <label className={s.inputLabel}>Workshop or Factory</label>
                   <div className={s.inputIcon}>
                     <Building className={s.inputIconSvg} />
                   </div>
                   <input
                     type="text"
-                    placeholder="Company name"
+                    placeholder="Workshop or factory name"
                     className={s.input}
                     value={searchTerm.company}
                     onChange={(e) =>
@@ -680,7 +672,7 @@ const FindJobPage = () => {
                   </div>
                   <input
                     type="text"
-                    placeholder="City"
+                    placeholder="City or industrial area"
                     className={s.input}
                     value={searchTerm.location}
                     onChange={(e) =>
@@ -696,7 +688,7 @@ const FindJobPage = () => {
                   </div>
                   <input
                     type="text"
-                    placeholder="Job title or keyword"
+                    placeholder="ITI trade or skill"
                     className={s.input}
                     value={searchTerm.role}
                     onChange={(e) => handleSearchChange("role", e.target.value)}
@@ -710,7 +702,7 @@ const FindJobPage = () => {
                   </div>
                   <input
                     type="text"
-                    placeholder="Experience"
+                    placeholder="Experience or fresher"
                     className={s.input}
                     value={searchTerm.experience}
                     onChange={(e) =>
@@ -841,7 +833,7 @@ const FindJobPage = () => {
                 <div className={s.filterSection}>
                   <h3 className={s.filterSectionTitle}>
                     <BarChart3 className={s.filterSectionIcon} />
-                    Category
+                    ITI Trade
                   </h3>
                   <div className={s.categoryGrid}>
                     {categories.map((category) => (

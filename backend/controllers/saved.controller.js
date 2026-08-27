@@ -35,83 +35,13 @@ export const toggleSavedJob = async (req, res) => {
   }
 };
 
-// TOGGLE SAVE QUESTION
-export const toggleSavedQuestion = async (req, res) => {
-  try {
-    const { questionId } = req.params;
-    const { type } = req.query;
-    const userId = req.user.id;
-
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-
-    let isSaved;
-    let message;
-
-    if (type === "role") {
-      isSaved = user.savedRoleQuestions.includes(questionId);
-
-      if (isSaved) {
-        user.savedRoleQuestions = user.savedRoleQuestions.filter(
-          (id) => id.toString() !== questionId,
-        );
-        message = "Role question unsaved";
-      } else {
-        user.savedRoleQuestions.push(questionId);
-        message = "Role question saved";
-      }
-    } else {
-      // default to interview question
-      isSaved = user.saveInterviewQuestions.includes(questionId);
-
-      if (isSaved) {
-        user.saveInterviewQuestions = user.saveInterviewQuestions.filter(
-          (id) => id.toString() !== questionId,
-        );
-        message = "Interview question unsaved";
-      } else {
-        user.saveInterviewQuestions.push(questionId);
-        message = "Interview question saved";
-      }
-    }
-
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message,
-      savedRoleQuestions: user.savedRoleQuestions,
-      savedInterviewQuestions: user.saveInterviewQuestions,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error updating saved question status",
-    });
-  }
-};
-
 // TO GET ALL SAVED ITEMS
 export const getSavedItems = async (req, res) => {
   try {
     const userId = req.user.id;
    
 
-    const user = await User.findById(userId)
-      .populate("savedJobs")
-      .populate({
-        path: "saveInterviewQuestions",
-        populate: { path: "company" },
-      })
-      .populate({
-        path: "savedRoleQuestions",
-        populate: { path: "roleId" },
-      });
+    const user = await User.findById(userId).populate("savedJobs");
 
     if (!user) {
       return res
@@ -122,8 +52,6 @@ export const getSavedItems = async (req, res) => {
     res.status(200).json({
       success: true,
       savedJobs: user.savedJobs,
-      savedRoleQuestions: user.savedRoleQuestions,
-      savedInterviewQuestions: user.saveInterviewQuestions,
     });
   } catch (error) {
     res.status(500).json({

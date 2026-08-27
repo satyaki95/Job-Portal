@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { signUpPageStyles as s } from "../assets/dummyStyles";
 import API from "../utils/api";
 import {
@@ -61,6 +61,9 @@ const SignUpPage = () => {
     name: "",
     email: "",
     password: "",
+    role: "user",
+    organizationName: "",
+    description: "",
   });
 
   const [otp, setOtp] = useState("");
@@ -88,6 +91,10 @@ const SignUpPage = () => {
   const validateForm = () => {
     if (!formData.name || !formData.email || !formData.password) {
       setToast({ message: "All fields are required", type: "error" });
+      return false;
+    }
+    if (formData.role === "employer" && !formData.organizationName.trim()) {
+      setToast({ message: "Organization name is required", type: "error" });
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -272,6 +279,61 @@ const SignUpPage = () => {
                       />
                     </div>
                   </div>
+
+                  <div className={s.inputGroup}>
+                    <label htmlFor="role" className={s.inputLabel}>
+                      Account type
+                    </label>
+                    <select
+                      id="role"
+                      name="role"
+                      value={formData.role}
+                      onChange={handleChange}
+                      className={s.input}
+                    >
+                      <option value="admin">Admin</option>
+                      <option value="user">Job seeker</option>
+                      <option value="employer">Employer</option>
+                    </select>
+                  </div>
+
+                  {formData.role === "employer" && (
+                    <>
+                      <div className={s.inputGroup}>
+                        <label htmlFor="organizationName" className={s.inputLabel}>
+                          Organization Name
+                        </label>
+                        <div className={s.inputWrapper}>
+                          <User className={s.inputIcon} />
+                          <input
+                            type="text"
+                            id="organizationName"
+                            name="organizationName"
+                            value={formData.organizationName}
+                            onChange={handleChange}
+                            required
+                            className={s.input}
+                            placeholder="Your company or organization"
+                          />
+                        </div>
+                      </div>
+
+                      <div className={s.inputGroup}>
+                        <label htmlFor="description" className={s.inputLabel}>
+                          Organization Description
+                        </label>
+                        <textarea
+                          id="description"
+                          name="description"
+                          value={formData.description}
+                          onChange={handleChange}
+                          className={s.input}
+                          placeholder="Tell candidates about your organization"
+                          rows={3}
+                        />
+                      </div>
+                    </>
+                  )}
 
                   <div className={s.inputGroup}>
                     <label htmlFor="email" className={s.inputLabel}>

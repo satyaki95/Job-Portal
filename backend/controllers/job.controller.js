@@ -1,5 +1,6 @@
 import Job from "../models/job.model.js";
 import Application from "../models/application.model.js";
+import mongoose from "mongoose";
 import { uploadToCloudinary } from "../utils/cloudinaryUpload.js";
 
 // CREATE A JOB (ONLY BY ADMIN )
@@ -14,6 +15,7 @@ export const createJob = async (req, res) => {
       salary,
       salaryType,
       jobType,
+      status,
       postDate,
       category,
       openings,
@@ -71,6 +73,7 @@ export const createJob = async (req, res) => {
       salary,
       salaryType,
       jobType,
+      status,
       postDate,
       category,
       openings,
@@ -170,8 +173,13 @@ export const getAllJobs = async (req, res) => {
 export const getDashboardStats = async (req, res) => {
   try {
     const adminId = req.user.id;
-    const totalJobs = await Job.countDocuments();
-    const closedJobs = await Job.countDocuments({ status: "closed" });
+    const ownerQuery =
+      req.user.role === "employer" ? { createdBy: adminId } : {};
+    const totalJobs = await Job.countDocuments(ownerQuery);
+    const closedJobs = await Job.countDocuments({
+      ...ownerQuery,
+      status: "closed",
+    });
     const totalApplicationsResult = await Application.aggregate([
       {
         $lookup: {
@@ -195,12 +203,24 @@ export const getDashboardStats = async (req, res) => {
       {
         $unwind: "$jobRecord",
       },
+      ...(req.user.role === "employer"
+        ? [
+            {
+              $match: {
+                "jobRecord.createdBy": new mongoose.Types.ObjectId(req.user.id),
+              },
+            },
+          ]
+        : []),
       { $count: "count" },
     ]);
 
     const totalApplications = totalApplicationsResult[0]?.count || 0;
 
-    const companies = await Job.distinct("companyName", { status: "active" });
+    const companies = await Job.distinct("companyName", {
+      ...ownerQuery,
+      status: "active",
+    });
     const totalCompanies = companies.length;
     return res.status(200).json({
       success: true,
@@ -223,7 +243,9 @@ export const getDashboardStats = async (req, res) => {
 // GET ALL JOBS BY THE ADMIN
 export const getJobsByAdmin = async (req, res) => {
   try {
-    const jobs = await Job.find().sort({ createdAt: -1 });
+    const query =
+      req.user.role === "employer" ? { createdBy: req.user.id } : {};
+    const jobs = await Job.find(query).sort({ createdAt: -1 });
     const applicationStats = await Application.aggregate([
       {
         $lookup: {
@@ -294,6 +316,17 @@ export const getJobById = async (req, res) => {
 // UPDATE A JOB (ONLY BY ADMIN)
 export const updateJob = async (req, res) => {
   try {
+    const existingJob = await Job.findById(req.params.id);
+    if (!existingJob)
+      return res.status(404).json({ success: false, message: "Job not found" });
+    if (
+      req.user.role === "employer" &&
+      existingJob.createdBy.toString() !== req.user.id
+    ) {
+      return res
+        .status(403)
+        .json({ success: false, message: "You do not own this job" });
+    }
     let {
       roleName,
       companyName,
@@ -405,9 +438,17 @@ export const deleteJob = async (req, res) => {
         message: "Job not found",
       });
     }
+    if (
+      req.user.role === "employer" &&
+      job.createdBy.toString() !== req.user.id
+    ) {
+      return res
+        .status(403)
+        .json({ success: false, message: "You do not own this job" });
+    }
 
     await Application.deleteMany({ job: req.params.id }); // Delete associated applications
-    await Job.deleteOne(); // Delete the job
+    await job.deleteOne(); // Delete the selected job
     return res.status(200).json({
       success: true,
       message: "Job deleted successfully and associated applications removed",
@@ -429,6 +470,14 @@ export const closeJob = async (req, res) => {
         success: false,
         message: "Job not found",
       });
+    }
+    if (
+      req.user.role === "employer" &&
+      job.createdBy.toString() !== req.user.id
+    ) {
+      return res
+        .status(403)
+        .json({ success: false, message: "You do not own this job" });
     }
 
     job.status = "closed";

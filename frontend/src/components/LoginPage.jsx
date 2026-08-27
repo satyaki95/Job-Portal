@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { loginPageStyles as s } from "../assets/dummyStyles";
 import {
   ArrowLeft,
@@ -120,6 +120,19 @@ const LoginPage = () => {
         return;
       }
 
+      if (res.data.user.role === "employer") {
+        const employerData = {
+          name: res.data.user.name,
+          email: res.data.user.email,
+          role: res.data.user.role,
+          token: res.data.token,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(employerData));
+        localStorage.setItem("token", res.data.token);
+        navigate("/employer");
+        return;
+      }
+
       const userData = {
         name: res.data.user.name,
         email: res.data.user.email,
@@ -127,6 +140,7 @@ const LoginPage = () => {
       };
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
+      localStorage.setItem("token", res.data.token);
 
       setToast({
         message: "Login successful",

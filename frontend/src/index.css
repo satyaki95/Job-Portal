@@ -1,1 +1,52 @@
 @import "tailwindcss";
+
+.employer-theme [class*="bg-indigo-"],
+.employer-theme [class*="bg-purple-"],
+.employer-theme [class*="bg-blue-"] {
+  background-color: #ecfdf5 !important;
+}
+
+.employer-theme [class*="text-indigo-"],
+.employer-theme [class*="text-purple-"],
+.employer-theme [class*="text-blue-"] {
+  color: #047857 !important;
+}
+
+.employer-theme [class*="border-indigo-"],
+.employer-theme [class*="border-purple-"],
+.employer-theme [class*="border-blue-"] {
+  border-color: #a7f3d0 !important;
+}
+
+.employer-theme [class*="ring-indigo-"],
+.employer-theme [class*="ring-purple-"],
+.employer-theme [class*="ring-blue-"] {
+  --tw-ring-color: #6ee7b7 !important;
+}
+
+.employer-theme [class*="bg-linear-to"] {
+  background-image: linear-gradient(135deg, #6ee7b7, #ccfbf1) !important;
+}
+
+.employer-theme [class*="min-h-screen"][class*="bg-linear-to"] {
+  background-color: #f8fafc !important;
+  background-image: none !important;
+}
+
+.employer-theme h1[class*="text-transparent"],
+.employer-theme h1[class*="bg-clip-text"] {
+  color: #064e3b !important;
+  -webkit-text-fill-color: #064e3b !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+}
+
+.employer-theme .activeIndicator,
+.employer-theme [class*="-bottom-2"][class*="h-1"] {
+  background-image: linear-gradient(to right, #34d399, #14b8a6) !important;
+}
+
+.employer-theme .animate-border {
+  background: linear-gradient(90deg, #059669, #14b8a6, #10b981) !important;
+}

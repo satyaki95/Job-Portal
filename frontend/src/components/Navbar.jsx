@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { navbarStyles as s } from "../assets/dummyStyles";
 import logo from "../assets/logo.png";
 import {
   Bookmark,
-  Briefcase,
+  ClipboardList,
   ChevronDown,
   ChevronUp,
   Home,
@@ -12,7 +12,6 @@ import {
   Menu,
   Search,
   User,
-  UserCog,
   UserPen,
   X,
 } from "lucide-react";
@@ -21,14 +20,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 const navItems = [
   { id: "home", label: "Home", path: "/", icon: <Home size={18} /> },
   { id: "jobs", label: "Jobs", path: "/jobs", icon: <Search size={18} /> },
-  {
-    id: "companies",
-    label: "Companies",
-    path: "/companies",
-    icon: <Briefcase size={18} />,
-  },
-  { id: "roles", label: "Roles", path: "/roles", icon: <UserCog size={18} /> },
   { id: "saved", label: "Saved", path: "/saved", icon: <Bookmark size={18} /> },
+  { id: "applications", label: "Applications", path: "/applications", icon: <ClipboardList size={18} /> },
   {
     id: "contact",
     label: "Contact",
@@ -45,7 +38,6 @@ const Navbar = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeNavItem, setActiveNavItem] = useState("home");
   const [isHovered, setIsHovered] = useState(null);
   const [user, setUser] = useState(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -56,14 +48,6 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    const path = location.pathname || "/";
-    const matched =
-      navItems.find((i) => i.path === path) ||
-      navItems.find((i) => path.startsWith(i.path) && i.path !== "/");
-    setActiveNavItem(matched ? matched.id : "home");
-  }, [location]);
 
   useEffect(() => {
     try {
@@ -115,10 +99,11 @@ const Navbar = () => {
   }, []);
 
   const handleNavClick = (item) => {
-    navigate(item.path);
-    setActiveNavItem(item.id);
     setIsMobileMenuOpen(false);
   };
+
+  const isNavItemActive = (path) =>
+    path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
 
   // Logout
   const handleLogout = () => {
@@ -175,15 +160,16 @@ const Navbar = () => {
                 onMouseEnter={() => setIsHovered(item.id)}
                 onMouseLeave={() => setIsHovered(null)}
               >
-                <button
+                <Link
+                  to={item.path}
                   onClick={() => handleNavClick(item)}
-                  className={s.navButton(activeNavItem === item.id)}
+                  className={s.navButton(isNavItemActive(item.path))}
                 >
                   <span className={s.navIcon(isHovered === item.id)}>
                     {item.icon}
                   </span>
                   <span className={s.navLabel}>{item.label}</span>
-                </button>
+                </Link>
                 <div className={s.navUnderline(isHovered === item.id)}></div>
               </div>
             ))}
@@ -255,20 +241,21 @@ const Navbar = () => {
           <div className={s.mobileMenuCard}>
             <div className={s.mobileMenuSpace}>
               {navItems.map((item) => (
-                <button
+                <Link
                   key={item.id}
+                  to={item.path}
                   onClick={() => handleNavClick(item)}
-                  className={s.mobileNavButton(activeNavItem === item.id)}
+                  className={s.mobileNavButton(isNavItemActive(item.path))}
                 >
                   <div
                     className={s.mobileNavIconWrapper(
-                      activeNavItem === item.id,
+                      isNavItemActive(item.path),
                     )}
                   >
                     {item.icon}
                   </div>
                   <span className={s.mobileNavLabel}>{item.label}</span>
-                </button>
+                </Link>
               ))}
               <div className={s.mobileDivider}>
                 <div className={s.mobileMenuSpace}>

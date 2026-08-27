@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import {
   Bookmark,
@@ -116,37 +116,26 @@ const SavePage = () => {
         return;
       }
 
-      const [savedRes, rolesRes, companiesRes] = await Promise.all([
+      const [savedRes] = await Promise.all([
         fetch(`${baseURL}/api/saved`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch(`${baseURL}/api/interview/roles`),
-        fetch(`${baseURL}/api/interview/companies`),
       ]);
 
       const savedData = await savedRes.json();
-      const rolesData = await rolesRes.json();
-      const companiesData = await companiesRes.json();
-
-      if (rolesData.success) setRoles(rolesData.roles);
-      if (companiesData.success) setCompaniesState(companiesData.companies);
 
       if (savedData.success) {
         setSavedItems({
           jobs: savedData.savedJobs,
-          interviewQuestions: savedData.savedInterviewQuestions,
-          roleQuestions: savedData.savedRoleQuestions,
+          interviewQuestions: [],
+          roleQuestions: [],
         });
 
         localStorage.setItem(
           STORAGE_JOBS_KEY,
           JSON.stringify(savedData.savedJobs.map((j) => j._id)),
         );
-        const qIds = [
-          ...savedData.savedInterviewQuestions.map((q) => `company:${q._id}`),
-          ...savedData.savedRoleQuestions.map((q) => `role:${q._id}`),
-        ];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(qIds));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
       }
     } catch (error) {
       console.error("Error fetching saved items:", error);
@@ -896,7 +885,7 @@ const SavePage = () => {
         <div className={s.filterSection}>
           <div className={s.filterTitleWrapper}>
             <div>
-              <h1 className={s.filterTitle}>Saved Questions & Jobs</h1>
+              <h1 className={s.filterTitle}>Saved Jobs</h1>
               <p className={s.filterSubtitle}>
                 Saved across roles, companies & jobs
               </p>
@@ -1000,8 +989,7 @@ const SavePage = () => {
               </div>
               <h3 className={s.emptyStateTitle}>No saved items</h3>
               <p className={s.emptyStateText}>
-                Save questions on role or company pages — or save jobs on the
-                Find Job page — to see them here.
+                Save jobs on the Find Job page — to see them here.
               </p>
             </div>
           </div>

@@ -4,6 +4,7 @@ import {
   applyJob,
   getApplicants,
   getUserApplications,
+  updateApplicationStatus,
 } from "../controllers/application.controller.js";
 
 const applicationRouter = express.Router();
@@ -15,8 +16,15 @@ applicationRouter.get("/user", authMiddleware, getUserApplications);
 applicationRouter.get(
   "/:id/applicants",
   authMiddleware,
-  authorize("admin"),
+  authorize("admin", "employer"),
   getApplicants,
+);
+
+applicationRouter.patch(
+  "/:id/status",
+  authMiddleware,
+  authorize("admin", "employer"),
+  updateApplicationStatus,
 );
 
 export default applicationRouter;

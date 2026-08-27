@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Employer from "../models/employer.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import {
@@ -9,7 +10,7 @@ import {
 // REGISTER USER
 export const register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, organizationName, description } = req.body;
     const userExist = await User.findOne({ email });
 
     if (userExist) {
@@ -32,9 +33,18 @@ export const register = async (req, res) => {
       email,
       password: hashedPassword,
       role: userRole,
+      employerStatus: userRole === "employer" ? "pending" : "approved",
       verificationOTP,
       verificationOTPExpires,
     });
+
+    if (userRole === "employer") {
+      await Employer.create({
+        user: user._id,
+        organizationName: organizationName?.trim() || name,
+        description: description?.trim() || "",
+      });
+    }
 
     // TO SEND THE VERIFICATION EMAIL
     try {
@@ -78,6 +88,16 @@ export const login = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Please verify your email before logging in",
+      });
+    }
+
+    if (user.role === "employer" && user.employerStatus !== "approved") {
+      return res.status(403).json({
+        success: false,
+        message:
+          user.employerStatus === "rejected"
+            ? "Your employer registration was rejected"
+            : "Your employer registration is awaiting admin approval",
       });
     }
 

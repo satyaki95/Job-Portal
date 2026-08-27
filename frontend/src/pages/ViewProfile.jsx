@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../components/Navbar";
 import ViewProfilePage from "../components/ViewProfilePage";
 import Footer from "../components/Footer";

@@ -8,8 +8,6 @@ import React, {
 import { navbarStyles as s } from "../../assets/adminDummyStyles";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  Briefcase,
-  Building,
   ChevronDown,
   Home,
   List,
@@ -17,39 +15,21 @@ import {
   LogOut,
   Menu,
   User,
-  UserCheck,
+  Users,
   X,
 } from "lucide-react";
 import logoFallback from "../../assets/logo.png";
 
 const NAV_ITEMS = [
   { key: "dashboard", label: "Dashboard", Icon: Home },
-  { key: "jobs", label: "Jobs", Icon: Briefcase },
   { key: "listJob", label: "List Job", Icon: List },
-  { key: "company", label: "Companies", Icon: Building },
-  {
-    key: "companyQuestions",
-    label: "Company Questions",
-    Icon: Building,
-    dropdown: [{ key: "listCompanyQ", label: "List Company Questions" }],
-  },
-  {
-    key: "roleQuestions",
-    label: "Role Questions",
-    Icon: UserCheck,
-    dropdown: [{ key: "listRoleQ", label: "List Role Questions" }],
-  },
+  { key: "management", label: "Manage Users", Icon: Users },
 ];
 
 const ROUTES = {
   dashboard: "/admin",
-  company: "/admin/companies",
-  jobs: "/admin/addjobs",
   listJob: "/admin/list/jobs",
-  companyQuestions: "/admin/company-questions",
-  listCompanyQ: "/admin/list/company-questions",
-  roleQuestions: "/admin/role-questions",
-  listRoleQ: "/admin/list/role-questions",
+  management: "/admin/manage",
   login: "/admin/login",
 };
 
@@ -57,26 +37,21 @@ const AdminNavbar = ({ logoSrc, brandName = "Job Portal", onNavigate }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
+  const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
-    setUser(storedUser ? JSON.parse(storedUser) : null);
-  }, [location.pathname]);
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const pathToKey = (pathname) => {
-    const found = Object.entries(ROUTES).find(([key, path]) => {
-      if (path === "/") return pathname === "/";
-      return (
-        pathname === path ||
-        pathname.startsWith(path + "/") ||
-        pathname.startsWith(path)
-      );
-    });
+    const found = Object.entries(ROUTES).find(([, path]) =>
+      path === ROUTES.dashboard
+        ? pathname === path
+        : pathname === path || pathname.startsWith(`${path}/`),
+    );
     return found ? found[0] : "dashboard";
   };
 
-  const [active, setActive] = useState(pathToKey(location.pathname));
+  const active = pathToKey(location.pathname);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -115,13 +90,6 @@ const AdminNavbar = ({ logoSrc, brandName = "Job Portal", onNavigate }) => {
     return () => document.removeEventListener("mousedown", handleDocClick);
   }, [isLGOnly]);
 
-  // sync active state with current route
-  useEffect(() => {
-    const key = pathToKey(location.pathname);
-    setActive(key);
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
-
   // Measure and update indicator position – useLayoutEffect prevents flicker
   const updateIndicator = useCallback(() => {
     const container = navContainerRef.current;
@@ -155,7 +123,6 @@ const AdminNavbar = ({ logoSrc, brandName = "Job Portal", onNavigate }) => {
   const handleNavigate = (key) => {
     const path = ROUTES[key] ?? "/";
 
-    setActive(key);
     onNavigate?.(key);
     navigate(path);
     setMobileMenuOpen(false);

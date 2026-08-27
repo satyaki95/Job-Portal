@@ -1,16 +1,15 @@
-import React from "react";
 import Navbar from "../components/Navbar";
-import CompanyPage from "../components/CompanyPage";
+import ApplicationsPage from "../components/ApplicationsPage";
 import Footer from "../components/Footer";
 
-const Company = () => {
+const Applications = () => {
   return (
     <div>
       <Navbar />
-      <CompanyPage />
+      <ApplicationsPage />
       <Footer />
     </div>
   );
 };
 
-export default Company;
+export default Applications;

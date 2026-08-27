@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { viewProfilePageStyles as s } from "../assets/dummyStyles";
 import {
   Edit3,
@@ -47,6 +47,8 @@ const ViewProfilePage = () => {
     email: "",
     phone: "",
     resume: null,
+    tradeSkills: [],
+    certificationDetails: "",
   });
   const [originalProfile, setOriginalProfile] = useState(null);
   const [toast, setToast] = useState(null);
@@ -70,6 +72,8 @@ const ViewProfilePage = () => {
           email: data.user.email || "",
           phone: data.user.phone || "",
           resume: data.user.resume || null,
+          tradeSkills: data.user.tradeSkills || [],
+          certificationDetails: data.user.certificationDetails || "",
         });
         setOriginalProfile(data.user);
       } catch (error) {
@@ -140,6 +144,8 @@ const ViewProfilePage = () => {
       formData.append("name", profile.name);
       formData.append("email", profile.email);
       formData.append("phone", profile.phone);
+      formData.append("tradeSkills", JSON.stringify(profile.tradeSkills));
+      formData.append("certificationDetails", profile.certificationDetails);
 
       if (profile.resume instanceof File) {
         formData.append("resume", profile.resume);
@@ -157,6 +163,8 @@ const ViewProfilePage = () => {
         email: data.user.email,
         phone: data.user.phone,
         resume: data.user.resume,
+        tradeSkills: data.user.tradeSkills || [],
+        certificationDetails: data.user.certificationDetails || "",
       });
       setOriginalProfile(data.user);
       setIsEditing(false);
@@ -282,6 +290,56 @@ const ViewProfilePage = () => {
                 />
               ) : (
                 <p className={s.displayText}>{profile.name}</p>
+              )}
+            </div>
+          </div>
+          <div className={s.formGrid}>
+            <div className={s.fieldGroup}>
+              <label className={s.fieldLabel}>
+                <User className={s.fieldIcon} />
+                Trade Skills
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={profile.tradeSkills.join(", ")}
+                  onChange={(e) =>
+                    setProfile((prev) => ({
+                      ...prev,
+                      tradeSkills: e.target.value.split(",").map((skill) => skill.trim()),
+                    }))
+                  }
+                  className={s.input}
+                  placeholder="Electrician, Fitter, Welder"
+                />
+              ) : (
+                <p className={s.displayText}>
+                  {profile.tradeSkills.length ? profile.tradeSkills.join(", ") : "Add your ITI trades"}
+                </p>
+              )}
+            </div>
+            <div className={s.fieldGroup}>
+              <label className={s.fieldLabel}>
+                <FileText className={s.fieldIcon} />
+                Certification Details
+              </label>
+              {isEditing ? (
+                <textarea
+                  value={profile.certificationDetails}
+                  onChange={(e) =>
+                    setProfile((prev) => ({
+                      ...prev,
+                      certificationDetails: e.target.value,
+                    }))
+                  }
+                  className={s.input}
+                  placeholder="ITI trade, NCVT/SCVT, year, institute"
+                  rows={3}
+                />
+              ) : (
+                <p className={s.displayText}>
+                  {profile.certificationDetails || "Add certification details"}
+                </p>
               )}
             </div>
           </div>

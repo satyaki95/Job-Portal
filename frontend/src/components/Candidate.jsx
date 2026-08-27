@@ -39,7 +39,7 @@ const Candidate = () => {
     };
   }, []);
 
-  const handleMouseMove = (e, id) => {
+  const handleMouseMove = (e) => {
     if (!isXL) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
@@ -153,7 +153,7 @@ const Candidate = () => {
               <div
                 key={card.id}
                 className={s.cardWrapper}
-                onMouseMove={(e) => handleMouseMove(e, card.id)}
+                onMouseMove={handleMouseMove}
                 onMouseEnter={() => handleMouseEnter(card.id)}
                 onMouseLeave={handleMouseLeave}
                 aria-hidden="true"

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { toastStyles as s } from "../assets/dummyStyles";
 import { CheckCircle2, X, XCircle } from "lucide-react";
 

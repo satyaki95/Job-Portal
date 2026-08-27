@@ -72,6 +72,10 @@ export const getApplicants = async (req, res) => {
       return res.status(400).json({ success: false, message: "Job not found" });
     }
 
+    if (req.user.role === "employer" && job.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: "You do not own this job" });
+    }
+
     const applications = await Application.find({ job: jobId })
       .populate({
         path: "user",
@@ -88,11 +92,35 @@ export const getApplicants = async (req, res) => {
           applicationId: app._id,
           ...app.user._doc,
           appliedDate: app.createdAt,
+          status: app.status,
           resume: app.user.resume || "",
         })),
     });
   } catch (error) {
     console.error("Error fetching applications for job:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const updateApplicationStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!["pending", "accepted", "rejected"].includes(status)) {
+      return res.status(400).json({ success: false, message: "Invalid application status" });
+    }
+
+    const application = await Application.findById(req.params.id).populate("job");
+    if (!application) {
+      return res.status(404).json({ success: false, message: "Application not found" });
+    }
+    if (req.user.role === "employer" && application.job.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: "You do not own this job" });
+    }
+
+    application.status = status;
+    await application.save();
+    return res.status(200).json({ success: true, application });
+  } catch (error) {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
