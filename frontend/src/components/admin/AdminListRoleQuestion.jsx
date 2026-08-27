@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Image as ImageIcon,
   Edit2,
@@ -11,7 +11,7 @@ import {
   Loader2,
 } from "lucide-react";
 import axios from "axios";
-import { listRoleQuestionStyles as s } from "../assets/dummyStyles";
+import { listRoleQuestionStyles as s } from "../../assets/adminDummyStyles";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -127,7 +127,7 @@ const findHeaderKey = (headers, variants) => {
   return null;
 };
 
-const ListRoleQuestion = () => {
+const AdminListRoleQuestion = () => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
@@ -151,9 +151,7 @@ const ListRoleQuestion = () => {
   const fetchRoles = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${baseURL}/api/interview/roles`,
-      );
+      const response = await axios.get(`${baseURL}/api/interview/roles`);
       if (response.data.success) {
         setRoles(response.data.roles);
       }
@@ -617,4 +615,4 @@ const ListRoleQuestion = () => {
   );
 };
 
-export default ListRoleQuestion;
+export default AdminListRoleQuestion;

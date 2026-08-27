@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Building2,
   FileText,
@@ -13,7 +13,7 @@ import {
   Loader2,
 } from "lucide-react";
 import axios from "axios";
-import { listCompanyQuestionStyles as s } from "../assets/dummyStyles";
+import { listCompanyQuestionStyles as s } from "../../assets/adminDummyStyles";
 
 const API_URL = `${import.meta.env.VITE_BASE_URL}/api/interview`;
 
@@ -88,7 +88,7 @@ const parseCSVText = (text) => {
   return rows.map((r) => r.map((cell) => (cell == null ? "" : cell.trim())));
 };
 
-const ListCompanyQuestion = () => {
+const AdminListCompanyQuestion = () => {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -740,4 +740,4 @@ const ListCompanyQuestion = () => {
   );
 };
 
-export default ListCompanyQuestion;
+export default AdminListCompanyQuestion;

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { companyQuestionPageStyles as s } from "../assets/dummyStyles";
+import { useEffect, useState } from "react";
+import { companyQuestionPageStyles as s } from "../../assets/adminDummyStyles";
 import axios from "axios";
 import {
   Building2,
@@ -130,7 +130,7 @@ const parseCSVText = (text) => {
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
-const CompanyQuestionPage = () => {
+const AdminCompanyQuestionPage = () => {
   const [companyName, setCompanyName] = useState("");
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState("");
@@ -626,4 +626,4 @@ const CompanyQuestionPage = () => {
   );
 };
 
-export default CompanyQuestionPage;
+export default AdminCompanyQuestionPage;

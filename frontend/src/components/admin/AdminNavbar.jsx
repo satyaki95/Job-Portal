@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { navbarStyles as s } from "../assets/dummyStyles";
+import { navbarStyles as s } from "../../assets/adminDummyStyles";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Briefcase,
@@ -20,7 +20,7 @@ import {
   UserCheck,
   X,
 } from "lucide-react";
-import logoFallback from "../assets/logo.png";
+import logoFallback from "../../assets/logo.png";
 
 const NAV_ITEMS = [
   { key: "dashboard", label: "Dashboard", Icon: Home },
@@ -42,18 +42,18 @@ const NAV_ITEMS = [
 ];
 
 const ROUTES = {
-  dashboard: "/",
-  company: "/companies",
-  jobs: "/addjobs",
-  listJob: "/list/jobs",
-  companyQuestions: "/company-questions",
-  listCompanyQ: "/list/company-questions",
-  roleQuestions: "/role-questions",
-  listRoleQ: "/list/role-questions",
-  login: "/login",
+  dashboard: "/admin",
+  company: "/admin/companies",
+  jobs: "/admin/addjobs",
+  listJob: "/admin/list/jobs",
+  companyQuestions: "/admin/company-questions",
+  listCompanyQ: "/admin/list/company-questions",
+  roleQuestions: "/admin/role-questions",
+  listRoleQ: "/admin/list/role-questions",
+  login: "/admin/login",
 };
 
-const Navbar = ({ logoSrc, brandName = "Job Portal", onNavigate }) => {
+const AdminNavbar = ({ logoSrc, brandName = "Job Portal", onNavigate }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -537,4 +537,4 @@ const Navbar = ({ logoSrc, brandName = "Job Portal", onNavigate }) => {
   );
 };
 
-export default Navbar;
+export default AdminNavbar;

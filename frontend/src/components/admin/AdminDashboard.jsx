@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { dashboardStyles as s, statColors } from "../assets/dummyStyles";
+import { useEffect, useState } from "react";
+import {
+  dashboardStyles as s,
+  statColors,
+} from "../../assets/adminDummyStyles";
 import { useNavigate } from "react-router-dom";
 import {
   Briefcase,
@@ -16,7 +19,7 @@ import {
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const [companyFilter, setCompanyFilter] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("active");
@@ -46,14 +49,11 @@ const Dashboard = () => {
         }
 
         // To fetch stats
-        const statsRef = await fetch(
-          `${baseURL}/api/job/admin/stats`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const statsRef = await fetch(`${baseURL}/api/job/admin/stats`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         const statsData = await statsRef.json();
 
@@ -62,14 +62,11 @@ const Dashboard = () => {
         }
 
         // To fetch the jobs
-        const jobsRef = await fetch(
-          `${baseURL}/api/job/admin/jobs`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const jobsRef = await fetch(`${baseURL}/api/job/admin/jobs`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         const jobsData = await jobsRef.json();
 
@@ -142,28 +139,22 @@ const Dashboard = () => {
         });
 
         // refresh the stats
-        const statsRef = await fetch(
-          `${baseURL}/api/job/admin/stats`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const statsRef = await fetch(`${baseURL}/api/job/admin/stats`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const statsData = await statsRef.json();
 
         if (statsData.success) {
           setDashboardStats(statsData.stats);
         }
 
-        const jobsRef = await fetch(
-          `${baseURL}/api/job/admin/jobs`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const jobsRef = await fetch(`${baseURL}/api/job/admin/jobs`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         const jobsData = await jobsRef.json();
 
@@ -469,7 +460,7 @@ const Dashboard = () => {
                     <div className={s.jobActions}>
                       <button
                         onClick={() =>
-                          navigate("/applicants", {
+                          navigate("/admin/applicants", {
                             state: {
                               jobId: job.id,
                               role: job.role,
@@ -511,4 +502,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { roleQuestionPageStyles as s } from "../assets/dummyStyles";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { roleQuestionPageStyles as s } from "../../assets/adminDummyStyles";
 import {
   AlertCircle,
   Briefcase,
@@ -154,7 +154,7 @@ const Toast = ({ message, type, onClose }) => {
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
-const RoleQuestionPage = () => {
+const AdminRoleQuestionPage = () => {
   const [roleName, setRoleName] = useState("");
   const [totalQuestions, setTotalQuestions] = useState("");
   const [imagePreview, setImagePreview] = useState("");
@@ -642,4 +642,4 @@ const RoleQuestionPage = () => {
   );
 };
 
-export default RoleQuestionPage;
+export default AdminRoleQuestionPage;

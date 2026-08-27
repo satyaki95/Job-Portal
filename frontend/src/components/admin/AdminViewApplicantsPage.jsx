@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { viewApplicantsPageStyles as s } from "../assets/dummyStyles";
+import { useEffect, useState } from "react";
+import { viewApplicantsPageStyles as s } from "../../assets/adminDummyStyles";
 import {
   ArrowLeft,
   Briefcase,
@@ -12,7 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
-const ViewApplicantsPage = () => {
+const AdminViewApplicantsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { jobId, role, companyName } = location.state || {};
@@ -206,4 +206,4 @@ const ViewApplicantsPage = () => {
   );
 };
 
-export default ViewApplicantsPage;
+export default AdminViewApplicantsPage;

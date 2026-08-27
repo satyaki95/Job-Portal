@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -24,7 +24,10 @@ import {
   Plus,
   Loader2,
 } from "lucide-react";
-import { listJobsStyles as s, getBadgeClasses } from "../assets/dummyStyles";
+import {
+  listJobsStyles as s,
+  getBadgeClasses,
+} from "../../assets/adminDummyStyles";
 
 /**
  * Badge Component
@@ -95,7 +98,7 @@ function formatSalary(salary) {
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
-const ListJobs = () => {
+const AdminListJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [editingJob, setEditingJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -618,7 +621,7 @@ const ListJobs = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate("/applicants", {
+                      navigate("/admin/applicants", {
                         state: {
                           jobId: job.id,
                           role: job.role,
@@ -1350,4 +1353,4 @@ const ListJobs = () => {
   );
 };
 
-export default ListJobs;
+export default AdminListJobs;

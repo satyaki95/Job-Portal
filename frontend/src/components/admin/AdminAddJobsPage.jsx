@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { addJobsPageStyles as s } from "../assets/dummyStyles";
+import { useEffect, useRef, useState } from "react";
+import { addJobsPageStyles as s } from "../../assets/adminDummyStyles";
 import {
   Briefcase,
   Building2,
@@ -291,7 +291,7 @@ const categories = [
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
-const AddJobsPage = () => {
+const AdminAddJobsPage = () => {
   const [formData, setFormData] = useState({ ...initialFormState });
   const [toast, setToast] = useState({
     show: false,
@@ -896,4 +896,4 @@ const AddJobsPage = () => {
   );
 };
 
-export default AddJobsPage;
+export default AdminAddJobsPage;

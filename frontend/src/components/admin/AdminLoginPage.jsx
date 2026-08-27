@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { loginPageStyles as s } from "../assets/dummyStyles";
+import { useEffect, useState } from "react";
+import { loginPageStyles as s } from "../../assets/adminDummyStyles";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -15,7 +15,7 @@ import {
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
-const LoginPage = () => {
+const AdminLoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -75,7 +75,7 @@ const LoginPage = () => {
       });
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/admin");
       }, 1500);
     } catch (error) {
       setToast({
@@ -178,4 +178,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default AdminLoginPage;

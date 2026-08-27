@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { companiesPageStyles as s } from "../assets/dummyStyles";
+import { useEffect, useRef, useState } from "react";
+import { companiesPageStyles as s } from "../../assets/adminDummyStyles";
 import axios from "axios";
 import {
   CheckCircle,
@@ -13,7 +13,7 @@ import {
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
-const Companies = () => {
+const AdminCompanies = () => {
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState("");
   const [website, setWebsite] = useState("");
@@ -108,13 +108,9 @@ const Companies = () => {
       formData.append("logo", logoFile);
       formData.append("website", website.trim());
 
-      const res = await axios.post(
-        `${baseURL}/api/company`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      const res = await axios.post(`${baseURL}/api/company`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       setCompanies((prev) => [res.data.company, ...prev]);
 
@@ -151,12 +147,9 @@ const Companies = () => {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.delete(
-        `${baseURL}/api/company/${pendingDeleteId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+      await axios.delete(`${baseURL}/api/company/${pendingDeleteId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setCompanies((prev) => prev.filter((c) => c._id !== pendingDeleteId));
       setPendingDeleteId(null);
 
@@ -397,4 +390,4 @@ const Companies = () => {
   );
 };
 
-export default Companies;
+export default AdminCompanies;

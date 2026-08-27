@@ -115,6 +115,11 @@ const LoginPage = () => {
         password,
       });
 
+      if (res.data.user.role === "admin") {
+        navigate("/admin/login");
+        return;
+      }
+
       const userData = {
         name: res.data.user.name,
         email: res.data.user.email,
