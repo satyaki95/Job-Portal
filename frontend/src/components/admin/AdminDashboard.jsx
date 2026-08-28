@@ -460,7 +460,7 @@ const AdminDashboard = () => {
                     <div className={s.jobActions}>
                       <button
                         onClick={() =>
-                          navigate("/admin/applicants", {
+                          navigate(`/admin/applicants/${job.id}`, {
                             state: {
                               jobId: job.id,
                               role: job.role,

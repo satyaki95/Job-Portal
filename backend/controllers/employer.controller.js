@@ -86,6 +86,38 @@ export const getEmployerApplicants = async (req, res) => {
   }
 };
 
+export const getAllEmployerApplicants = async (req, res) => {
+  try {
+    const jobs = await Job.find(ownerQuery(req.user.id)).select("_id roleName companyName");
+    const jobDetails = jobs.reduce((details, job) => {
+      details[job._id.toString()] = {
+        roleName: job.roleName,
+        companyName: job.companyName,
+      };
+      return details;
+    }, {});
+    const applications = await Application.find({ job: { $in: jobs.map((job) => job._id) } })
+      .populate("user", "name email phone resume")
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      success: true,
+      applicants: applications
+        .filter((application) => application.user)
+        .map((application) => ({
+          applicationId: application._id,
+          ...application.user.toObject(),
+          appliedForRole: jobDetails[application.job.toString()]?.roleName || "Applicants",
+          companyName: jobDetails[application.job.toString()]?.companyName || "",
+          appliedDate: application.createdAt,
+          status: application.status,
+        })),
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const updateEmployerApplication = async (req, res) => {
   try {
     const { status } = req.body;

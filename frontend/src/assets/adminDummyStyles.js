@@ -782,12 +782,14 @@ export const listJobsStyles = {
     "flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4",
   headerTitle:
     "text-3xl font-bold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent",
-  headerRight: "flex items-center gap-3 w-full sm:w-auto",
+  headerRight: "flex flex-wrap items-center gap-3 w-full sm:w-auto",
 
   // Filter
   filterContainer:
-    "flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-lg shadow-sm w-full sm:w-auto",
+    "flex items-center gap-2 bg-white border border-slate-200 px-3 py-2 rounded-lg shadow-sm w-full sm:w-64",
   filterInput: "outline-none text-sm placeholder:text-slate-400 w-full min-w-0",
+  applicantFilter:
+    "w-full sm:w-52 min-w-0 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 shadow-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100",
   filterClearBtn: "text-slate-400 hover:text-slate-600 shrink-0",
 
   // Badge

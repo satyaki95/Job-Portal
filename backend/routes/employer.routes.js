@@ -5,6 +5,7 @@ import {
   createEmployerJob,
   deleteEmployerJob,
   getEmployerApplicants,
+  getAllEmployerApplicants,
   getEmployerDashboard,
   getEmployerJobs,
   getEmployerProfile,
@@ -23,6 +24,7 @@ employerRouter.get("/jobs", ...employerOnly, getEmployerJobs);
 employerRouter.put("/jobs/:id", ...employerOnly, upload.single("companyLogo"), updateEmployerJob);
 employerRouter.delete("/jobs/:id", ...employerOnly, deleteEmployerJob);
 employerRouter.patch("/jobs/:id/close", ...employerOnly, closeEmployerJob);
+employerRouter.get("/applicants", ...employerOnly, getAllEmployerApplicants);
 employerRouter.get("/jobs/:jobId/applicants", ...employerOnly, getEmployerApplicants);
 employerRouter.patch(
   "/applications/:applicationId/status",

@@ -99,15 +99,16 @@ const App = () => {
 
         <Route path="/admin" element={<AdminHome />} />
         <Route path="/admin/list/jobs" element={<AdminListJob />} />
-        <Route path="/admin/applicants" element={<AdminApplicantsPage />} />
+        <Route path="/admin/applicants/:jobId" element={<AdminApplicantsPage />} />
         <Route path="/admin/manage" element={<><AdminNavbar /><AdminManagementPage /></>} />
         <Route path="/admin/login" element={<AdminLogin />} />
 
         <Route path="/employer" element={<EmployerHome />} />
         <Route path="/employer/addjobs" element={<EmployerAddJobs />} />
         <Route path="/employer/list/jobs" element={<EmployerListJob />} />
+        <Route path="/employer/applicants" element={<EmployerApplicantsPage />} />
         <Route
-          path="/employer/applicants"
+          path="/employer/applicants/:jobId"
           element={<EmployerApplicantsPage />}
         />
         <Route path="*" element={null} />

@@ -137,6 +137,7 @@ const AdminListJobs = () => {
         : "",
       category: bJob.category,
       openings: bJob.openings,
+      applicationCount: bJob.applicationCount || 0,
       overview: bJob.overview,
       responsibilities: bJob.responsibilities,
       criteria: bJob.jobCriteria,
@@ -182,6 +183,7 @@ const AdminListJobs = () => {
   const [editingLocationText, setEditingLocationText] = useState("");
 
   const [companyFilter, setCompanyFilter] = useState("");
+  const [applicantFilter, setApplicantFilter] = useState("all");
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -467,9 +469,18 @@ const AdminListJobs = () => {
     setEditingLocationText("");
   };
 
-  const filteredJobs = jobs.filter((job) =>
-    job.company.toLowerCase().includes(companyFilter.trim().toLowerCase()),
-  );
+  const filteredJobs = jobs.filter((job) => {
+    const matchesCompany = job.company
+      .toLowerCase()
+      .includes(companyFilter.trim().toLowerCase());
+    const applicationCount = Number(job.applicationCount || 0);
+    const matchesApplicants =
+      !isEmployer ||
+      applicantFilter === "all" ||
+      (applicantFilter === "with-applicants" && applicationCount > 0) ||
+      (applicantFilter === "without-applicants" && applicationCount === 0);
+    return matchesCompany && matchesApplicants;
+  });
 
   return (
     <div className={s.container}>
@@ -497,6 +508,19 @@ const AdminListJobs = () => {
                 </button>
               )}
             </div>
+
+            {isEmployer && (
+              <select
+                value={applicantFilter}
+                onChange={(e) => setApplicantFilter(e.target.value)}
+                className={s.applicantFilter}
+                aria-label="Filter jobs by applicants"
+              >
+                <option value="all">All applicant status</option>
+                <option value="with-applicants">With applicants</option>
+                <option value="without-applicants">Without applicants</option>
+              </select>
+            )}
 
             <Badge variant="default" className={s.badgeShrink}>
               <Briefcase size={14} />
@@ -629,13 +653,18 @@ const AdminListJobs = () => {
                   </button>
                   <button
                     onClick={() =>
-                      navigate(isEmployer ? "/employer/applicants" : "/admin/applicants", {
+                      navigate(
+                        isEmployer
+                          ? `/employer/applicants/${job.id}`
+                          : `/admin/applicants/${job.id}`,
+                        {
                         state: {
                           jobId: job.id,
                           role: job.role,
                           companyName: job.company,
                         },
-                      })
+                        },
+                      )
                     }
                     className={s.applicantsBtn}
                   >

@@ -10,14 +10,16 @@ import {
   X,
   Users,
 } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 const AdminViewApplicantsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { jobId, role, companyName } = location.state || {};
+  const { jobId: routeJobId } = useParams();
+  const { jobId: stateJobId, role, companyName } = location.state || {};
+  const jobId = routeJobId || stateJobId;
   const [loading, setLoading] = useState(true);
   const [filtered, setFiltered] = useState([]);
   const [updatingId, setUpdatingId] = useState(null);

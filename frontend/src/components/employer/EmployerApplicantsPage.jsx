@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Mail, Users, ExternalLink } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { Mail, Users, ExternalLink, Briefcase, Building2 } from "lucide-react";
+import { useLocation, useParams } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 const getToken = () =>
@@ -9,20 +9,24 @@ const getToken = () =>
 
 export default function EmployerApplicantsPage() {
   const { state } = useLocation();
+  const { jobId: routeJobId } = useParams();
+  const jobId = routeJobId || state?.jobId;
   const [applicants, setApplicants] = useState([]);
-  const [loading, setLoading] = useState(Boolean(state?.jobId));
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!state?.jobId) {
-      return;
-    }
-    fetch(`${baseURL}/api/employer/jobs/${state.jobId}/applicants`, {
+    fetch(
+      jobId
+        ? `${baseURL}/api/employer/jobs/${jobId}/applicants`
+        : `${baseURL}/api/employer/applicants`,
+      {
       headers: { Authorization: `Bearer ${getToken()}` },
-    })
+      },
+    )
       .then((res) => res.json())
       .then((data) => setApplicants(data.applicants || []))
       .catch(() => setApplicants([]))
       .finally(() => setLoading(false));
-  }, [state?.jobId]);
+  }, [jobId]);
   const updateStatus = async (applicationId, status) => {
     const res = await fetch(
       `${baseURL}/api/employer/applications/${applicationId}/status`,
@@ -49,7 +53,7 @@ export default function EmployerApplicantsPage() {
           Hiring pipeline
         </p>
         <h1 className="mt-2 text-3xl font-bold text-slate-900">
-          {state?.role || "Applicants"}
+          {state?.role || (jobId ? "Applicants" : "All Applicants")}
         </h1>
         <p className="mt-2 text-slate-500">
           {state?.companyName ||
@@ -81,6 +85,16 @@ export default function EmployerApplicantsPage() {
                         <Mail size={14} />
                         {app.email}
                       </p>
+                      <p className="mt-2 flex items-center gap-2 text-sm font-medium text-slate-700">
+                        <Briefcase size={14} />
+                        {app.appliedForRole || state?.role || "Job"}
+                      </p>
+                      {(app.companyName || state?.companyName) && (
+                        <p className="mt-1 flex items-center gap-2 text-sm text-slate-500">
+                          <Building2 size={14} />
+                          {app.companyName || state.companyName}
+                        </p>
+                      )}
                     </div>
                     <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold capitalize text-slate-600">
                       {app.status || "pending"}
