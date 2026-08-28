@@ -1,1 +1,1 @@
-Deployment - https://job-portal-flame-pi.vercel.app
+Deployment - https://job-portal-gamma-three-69.vercel.app
